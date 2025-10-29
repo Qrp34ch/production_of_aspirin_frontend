@@ -1,13 +1,26 @@
-/* .inputField {
-    display: flex;
-    padding: 12px 0;
+/* .card {
+    padding: 8px;
 }
-.inputField > input {
-    width: 200px;
-    margin-right: 12px;
-    border: 2px solid black;
-    border-radius: 4px;
-    outline: none;
+.loadingBg {
+    z-index: 999;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.textStyle {
+    height:48px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-bottom:12px;
+}
+.cardImage {
+    object-fit: contain;
+}
+.cardButton {
+    width: 100%;
 } */
 
 /* :root {

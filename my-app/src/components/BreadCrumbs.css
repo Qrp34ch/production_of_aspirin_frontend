@@ -27,3 +27,6 @@
 .breadcrumbs li:last-child {
   color: var(--active_color);
 }
+a {
+    text-decoration: none;
+}

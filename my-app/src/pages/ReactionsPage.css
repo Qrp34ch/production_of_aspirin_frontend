@@ -1,13 +1,17 @@
-/* .inputField {
+/* .container {
     display: flex;
-    padding: 12px 0;
+    flex-direction: column;
+    padding: 20px 40px;
+    min-width: 800px;
 }
-.inputField > input {
-    width: 200px;
-    margin-right: 12px;
-    border: 2px solid black;
-    border-radius: 4px;
-    outline: none;
+.containerLoading {
+    filter: blur(8px);
+}
+
+@media (max-width: 600px) {
+    .container{
+        min-width: auto;
+    }
 } */
 
 /* :root {

@@ -1,27 +1,50 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { ROUTES, ROUTE_LABELS } from "../../Routes";
+// components/Navigation.tsx
+import { type FC } from 'react';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link, useLocation } from 'react-router-dom';
+import { ROUTES, ROUTE_LABELS } from '../../Routes';
 
-const Navigation = () => {
+export const Navigation: FC = () => {
+  const location = useLocation();
+
   return (
-    <Navbar bg="light" expand="lg" className="mb-4">
+    <Navbar bg="primary" variant="dark" expand="lg" className="mb-4">
       <Container>
-        <Nav className="w-100 d-flex justify-content-between">
-          <Navbar.Brand as={Link} to={ROUTES.HOME}>
-            iTunes Browser
-          </Navbar.Brand>
-          <div>
-            <Nav.Link as={Link} to={ROUTES.HOME} className="d-inline-block">
+        <Navbar.Brand as={Link} to={ROUTES.HOME}>
+          🧪 Aspirin Production
+        </Navbar.Brand>
+        
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link 
+              as={Link} 
+              to={ROUTES.HOME}
+              className={location.pathname === ROUTES.HOME ? 'active' : ''}
+            >
               {ROUTE_LABELS.HOME}
             </Nav.Link>
-            <Nav.Link as={Link} to={ROUTES.ALBUMS} className="d-inline-block">
-              {ROUTE_LABELS.ALBUMS}
+            
+            <Nav.Link 
+              as={Link} 
+              to={ROUTES.REACTION}
+              className={location.pathname.startsWith(ROUTES.REACTION) ? 'active' : ''}
+            >
+              {ROUTE_LABELS.REACTION}
             </Nav.Link>
-          </div>
-        </Nav>
+          </Nav>
+          
+          <Nav>
+            <Nav.Link href="/API/docs" target="_blank">
+              📚 API Docs
+            </Nav.Link>
+            <Nav.Link href="/swagger/index.html" target="_blank">
+              🔍 Swagger
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 };
-
-export default Navigation;

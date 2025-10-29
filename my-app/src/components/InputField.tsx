@@ -1,21 +1,47 @@
-import { type FC } from 'react'
-import { Button } from 'react-bootstrap'
-import './InputField.css'
+// components/InputField.tsx
+import { type FC } from 'react';
+import { Form, Button, InputGroup } from 'react-bootstrap';
 
 interface Props {
-    value: string
-    setValue: (value: string) => void
-    onSubmit: () => void
-    loading?: boolean
-    placeholder?: string
-    buttonTitle?: string
+  value: string;
+  setValue: (value: string) => void;
+  onSubmit: () => void;
+  loading?: boolean;
+  placeholder?: string;
+  buttonTitle?: string;
 }
 
-const InputField: FC<Props> = ({ value, setValue, onSubmit, loading, placeholder, buttonTitle = 'Искать' }) => (
-    <div className="inputField">
-        <input value={value} placeholder={placeholder} onChange={(event => setValue(event.target.value))}/>
-        <Button disabled={loading} onClick={onSubmit}>{buttonTitle}</Button>
-    </div>
-)
+export const InputField: FC<Props> = ({ 
+  value, 
+  setValue, 
+  onSubmit, 
+  loading, 
+  placeholder = "Поиск...", 
+  buttonTitle = "Найти" 
+}) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit();
+  };
 
-export default InputField
+  return (
+    <Form onSubmit={handleSubmit}>
+      <InputGroup size="lg">
+        <Form.Control
+          type="text"
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={loading}
+        />
+        <Button 
+          variant="primary" 
+          type="submit" 
+          disabled={loading}
+        >
+          {loading ? 'Поиск...' : buttonTitle}
+        </Button>
+      </InputGroup>
+    </Form>
+  );
+};

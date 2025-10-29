@@ -1,21 +1,24 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AlbumPage } from "./pages/AlbumPage";
-import ITunesPage from "./pages/ITunesPage";
-import { ROUTES } from "../Routes";
-import { HomePage } from "./pages/HomePage";
-import Navigation from "./components/Navigation"
+// App.tsx
+import { type FC } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HomePage } from './pages/HomePage';
+import { ReactionsPage } from './pages/ReactionsPage';
+import { ReactionDetailPage } from './pages/ReactionDetailPage';
+import { ROUTES } from '../Routes';
+import './App.css';
 
-function App() {
+const App: FC = () => {
   return (
     <BrowserRouter>
-    <Navigation/>
-      <Routes>
-        <Route path={ROUTES.HOME} index element={<HomePage />} />
-        <Route path={ROUTES.ALBUMS} element={<ITunesPage />} />
-        <Route path={`${ROUTES.ALBUMS}/:id`} element={<AlbumPage />} />
-      </Routes>
+      <div className="App">
+        <Routes>
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.REACTION} element={<ReactionsPage />} />
+          <Route path={ROUTES.REACTION_DETAIL} element={<ReactionDetailPage />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
