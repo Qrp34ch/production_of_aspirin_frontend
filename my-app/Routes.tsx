@@ -1,4 +1,3 @@
-// Routes.ts
 export const ROUTES = {
   HOME: "/",
   REACTION: "/reaction",

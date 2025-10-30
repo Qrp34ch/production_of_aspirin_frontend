@@ -1,0 +1,75 @@
+.custom-navbar {
+  width: 100%;
+  background-color: #00A88F;
+  position: fixed;
+  top: 0;
+  z-index: 2000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+.nav-home {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 96px;
+  gap: 10px;
+  width: auto;
+  height: 68px;
+  flex: none;
+  order: 0;
+  flex-grow: 1;
+}
+
+.nav-home-link {
+  width: auto;
+  height: 48px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 48px;
+  text-align: center;
+  color: #FFFFFF;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-title {
+  width: auto;
+  height: 48px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 48px;
+  text-align: center;
+  color: #FFFFFF;
+  flex: none;
+  order: 1;
+  flex-grow: 1;
+}
+
+.nav-space {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+  width: 20%;
+  height: 32px;
+  flex: none;
+  order: 2;
+  flex-grow: 1;
+}

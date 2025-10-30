@@ -1,6 +1,6 @@
-// components/InputField.tsx
 import { type FC } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
+import './InputField.css';
 
 interface Props {
   value: string;

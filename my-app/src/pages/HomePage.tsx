@@ -1,52 +1,43 @@
-// pages/HomePage.tsx
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { ROUTES } from '../../Routes';
+import './HomePage.css';
 
 export const HomePage: FC = () => {
   return (
     <div className="mainpage">
-      <div className="header">
-        <div className="frame-14">
-          <Link to={ROUTES.REACTION}><span className="text-home">🏠︎</span></Link>
-        </div>
-        <p className="text-title"><span className="text-title">Производство аспирина</span></p>
-        <div className="frame-13"></div>
-      </div>
-
       <div className="standartpage">
-        <form action="/reaction" method="GET">
-          <div className="search">
-            <input type="text" name="query" placeholder="Поиск" className="text-search" />
-            <button type="submit" className="search-button">
-              <img src="http://localhost:9000/aspirinimages/img/search.png" alt="search" />
-            </button>
-          </div>
-        </form>
+        <Container>
+          <Row className="justify-content-center">
+            <Col lg={10} xl={8}>
+              <Card className="home-card">
+                <Card.Body className="text-center">
+                  <h1 className="home-main-title mb-4">Производство аспирина</h1>
+                  
+                  <div className="welcome-section mb-4">
+                    <p className="welcome-text">
+                      Добро пожаловать в веб-сервис по производству аспирина! Здесь Вы сможете ознакомиться 
+                      с этапами производства аспирина, а также расчитать теоретический выход продуктов химических реакций.
+                    </p>
+                  </div>
 
-        <div className="steps">
-          {/* Реакции будут подгружаться динамически */}
-          <div className="step">
-            <p className="step-name"><span className="step-name">Загрузка...</span></p>
-            <img src="/static/images/default-reaction.jpg" className="image" alt="image" />
-            <div className="frame-9">
-              <Link to="/reaction/1">
-                <div className="frame-17">
-                  <p className="text-details"><span className="text-details">Подробнее</span></p>
-                </div>
-              </Link>
-              <button className="frame-18">
-                <span className="text-add">Добавить</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div className="foot">
-          <span className="cart-link disabled">
-            <img src="http://localhost:9000/aspirinimages/img/korzina.png" className="cart" alt="cart" />
-          </span>
-        </div>
+                  <hr className="divider my-4" />
+
+                  <div className="reactions-section">
+                    <h2 className="reactions-title mb-3">Список реакций</h2>
+                    
+                    <Link to={ROUTES.REACTION}>
+                      <Button variant="primary" size="lg" className="reactions-btn">
+                        Перейти к списку реакций
+                      </Button>
+                    </Link>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </div>
   );

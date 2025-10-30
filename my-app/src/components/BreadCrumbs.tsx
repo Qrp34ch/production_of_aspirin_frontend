@@ -1,35 +1,60 @@
-// components/BreadCrumbs.tsx
 import { type FC } from 'react';
-import { Breadcrumb } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { ROUTES } from '../../Routes';
+import { Link, useLocation } from 'react-router-dom';
+import './BreadCrumbs.css';
 
 interface Crumb {
   label: string;
   path?: string;
 }
 
-interface BreadCrumbsProps {
-  crumbs: Crumb[];
-}
+export const BreadCrumbs: FC = () => {
+  const location = useLocation();
 
-export const BreadCrumbs: FC<BreadCrumbsProps> = ({ crumbs }) => {
+  const getBreadcrumbs = (): Crumb[] => {
+    if (location.pathname === '/') {
+      return [];
+    }
+
+    const pathSegments = location.pathname.split('/').filter(segment => segment);
+
+    const crumbs: Crumb[] = [
+      { label: 'Главная', path: '/' }
+    ];
+
+    if (location.pathname === '/reaction' || pathSegments[0] === 'reaction') {
+      if (pathSegments.length === 1) {
+        crumbs.push({ label: 'Реакции' });
+      } else if (pathSegments.length >= 2) {
+        crumbs.push({ label: 'Реакции', path: '/reaction' });
+        const reactionId = pathSegments[1];
+        crumbs.push({ label: `Реакция ${reactionId}` });
+      }
+    }
+    return crumbs;
+  };
+
+  const crumbs = getBreadcrumbs();
+
+  if (crumbs.length === 0) {
+    return null;
+  }
+
   return (
-    <Breadcrumb>
-      <Breadcrumb.Item linkAs={Link} linkProps={{ to: ROUTES.HOME }}>
-        🏠 Главная
-      </Breadcrumb.Item>
-      
-      {crumbs.map((crumb, index) => (
-        <Breadcrumb.Item
-          key={index}
-          linkAs={crumb.path ? Link : 'span'}
-          linkProps={crumb.path ? { to: crumb.path } : undefined}
-          active={index === crumbs.length - 1}
-        >
-          {crumb.label}
-        </Breadcrumb.Item>
-      ))}
-    </Breadcrumb>
+    <div className="breadcrumbs-container">
+      <ul className="breadcrumbs">
+        {crumbs.map((crumb, index) => (
+          <li key={index} className={`breadcrumb-item ${!crumb.path ? 'active' : ''}`}>
+            {crumb.path ? (
+              <Link to={crumb.path} className="breadcrumb-link">
+                {crumb.label}
+              </Link>
+            ) : (
+              <span className="breadcrumb-text">{crumb.label}</span>
+            )}
+            {index < crumbs.length - 1 && <span className="breadcrumb-separator">/</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

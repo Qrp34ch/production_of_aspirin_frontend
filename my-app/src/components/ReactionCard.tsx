@@ -1,7 +1,7 @@
-// components/ReactionCard.tsx
 import { type FC } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { type Reaction } from '../modules/type';
+import './ReactionCard.css';
 
 interface Props {
   reaction: Reaction;

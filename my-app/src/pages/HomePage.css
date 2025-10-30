@@ -1,0 +1,56 @@
+.home-card {
+  border: none;
+  background: #FFFFFF;
+}
+
+.home-main-title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 48px;
+  color: #000000;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-text {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #000000;
+  text-align: center;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: #666666;
+  margin: 2.5rem 0;
+}
+
+.reactions-title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 39px;
+  color: #000000;
+  margin-bottom: 1.5rem;
+}
+
+.reactions-btn {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  padding: 12px 30px;
+  background: #004E42;
+  border: none;
+}
+
+.reactions-btn:hover {
+  background: #00332a;
+}

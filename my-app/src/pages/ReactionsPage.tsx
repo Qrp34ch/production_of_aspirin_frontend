@@ -1,18 +1,21 @@
-// pages/ReactionsPage.tsx
 import { type FC, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { type Reaction } from '../modules/type';
 import { REACTIONS_MOCK } from '../modules/mock';
-import { getReactions } from '../modules/reactionsApi';
+import { getReactions, getSynthesisCartCount } from '../modules/reactionsApi';
+import { BreadCrumbs } from '../components/BreadCrumbs';
+import defaultImage from "../assets/DefaultImage.jpg"
+import './ReactionsPage.css';
 
 export const ReactionsPage: FC = () => {
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [reactions, setReactions] = useState<Reaction[]>([]);
-  const [synthesisCount] = useState(0);
+  const [synthesisCount, setSynthesisCount] = useState(0);
 
   useEffect(() => {
     loadReactions();
+    loadSynthesisCount();
   }, []);
 
   const loadReactions = async () => {
@@ -31,27 +34,26 @@ export const ReactionsPage: FC = () => {
     }
   };
 
+  const loadSynthesisCount = async () => {
+    try {
+      const count = await getSynthesisCartCount();
+      setSynthesisCount(count);
+    } catch (error) {
+      console.error('Error loading cart count:', error);
+      setSynthesisCount(0);
+    }
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     loadReactions();
   };
 
-  // Добавь эту проверку перед рендером
-  console.log('Current reactions state:', reactions);
-  console.log('Reactions is array?', Array.isArray(reactions));
-
   return (
     <div className="mainpage">
-      <div className="header">
-        <div className="frame-14">
-          <Link to="/"><span className="text-home">🏠︎</span></Link>
-        </div>
-        <p className="text-title"><span className="text-title">Производство аспирина</span></p>
-        <div className="frame-13"></div>
-      </div>
-
+      <BreadCrumbs />
       <div className="standartpage">
-        <form onSubmit={handleSearch}>
+        <form onSubmit={handleSearch} className="search-form">
           <div className="search">
             <input 
               type="text" 
@@ -69,38 +71,30 @@ export const ReactionsPage: FC = () => {
 
         <div className="steps">
           {loading ? (
-            <div key="loading" className="step">
-              <p className="step-name"><span className="step-name">Загрузка...</span></p>
+            <div className="step">
+              <p className="step-name">Загрузка...</p>
             </div>
-          ) : !Array.isArray(reactions) || reactions.length === 0 ? ( // Добавлена проверка на массив
-            <div key="no-results" className="step">
-              <p className="step-name"><span className="step-name">
-                {!Array.isArray(reactions) ? 'Ошибка данных' : 'Реакции не найдены'}
-              </span></p>
+          ) : reactions.length === 0 ? (
+            <div className="step">
+              <p className="step-name">Реакции не найдены</p>
             </div>
           ) : (
-            reactions.map((reaction, index) => {
-              console.log(`Rendering reaction ${index}:`, reaction);
-              console.log(`Reaction ID:`, reaction.ID);
-              return (
-                <div key={reaction.ID || `reaction-${index}`} className="step"> {/* Запасной ключ */}
-                  <p className="step-name"><span className="step-name">{reaction.Title}</span></p>
-                  <img src={reaction.Src || '/static/images/default-reaction.jpg'} className="image" alt="image" />
-                  <div className="frame-9">
-                    <Link to={`/reaction/${reaction.ID}`}>
-                      <div className="frame-17">
-                        <p className="text-details"><span className="text-details">Подробнее</span></p>
-                      </div>
-                    </Link>
-                    <button 
-                      className="frame-18"
-                    >
-                      <span className="text-add">Добавить</span>
-                    </button>
-                  </div>
+            reactions.map((reaction) => (
+              <div key={reaction.ID} className="step">
+                <p className="step-name">{reaction.Title}</p>
+                <img src={reaction.Src || defaultImage} className="image" alt="image" />
+                <div className="frame-9">
+                  <Link to={`/reaction/${reaction.ID}`}>
+                    <div className="frame-17">
+                      <p className="text-details">Подробнее</p>
+                    </div>
+                  </Link>
+                  <button className="frame-18">
+                    <span className="text-add">Добавить</span>
+                  </button>
                 </div>
-              );
-            })
+              </div>
+            ))
           )}
         </div>
 

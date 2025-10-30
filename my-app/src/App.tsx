@@ -1,6 +1,7 @@
-// App.tsx
 import { type FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navigation } from './components/Navigation';
+import { BreadCrumbs } from './components/BreadCrumbs';
 import { HomePage } from './pages/HomePage';
 import { ReactionsPage } from './pages/ReactionsPage';
 import { ReactionDetailPage } from './pages/ReactionDetailPage';
@@ -11,6 +12,8 @@ const App: FC = () => {
   return (
     <BrowserRouter>
       <div className="App">
+        <Navigation />
+        <BreadCrumbs />
         <Routes>
           <Route path={ROUTES.HOME} element={<HomePage />} />
           <Route path={ROUTES.REACTION} element={<ReactionsPage />} />

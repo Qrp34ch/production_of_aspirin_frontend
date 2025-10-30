@@ -1,45 +1,49 @@
 import type { Reaction } from "./type";
 import defaultImage from "../assets/DefaultImage.jpg"
+import defaultImage1 from "../assets/DefaultImage1.png"
+import defaultImage2 from "../assets/DefaultImage2.jpg"
+import defaultImage3 from "../assets/DefaultImage3.png"
+import defaultImage4 from "../assets/DefaultImage4.png"
+import defaultImage5 from "../assets/DefaultImage5.png"
 
-// mock.ts
 export const REACTIONS_MOCK: Reaction[] = [
   {
     ID: 1,
     Title: "Хлорирование толуола",
     Src: defaultImage,
-    SrcUr: defaultImage,
-    Details: "Реакция ацетилирования салициловой кислоты уксусным ангидридом в присутствии катализатора с образованием ацетилсалициловой кислоты.",
-    StartingMaterial: "Салициловая кислота",
-    DensitySM: 1.44,
-    MolarMassSM: 138,
-    ResultMaterial: "Ацетилсалициловая кислота",
-    DensityRM: 1.40,
-    MolarMassRM: 180
-  },
+    SrcUr: defaultImage1,
+    Details: "Толуол хлорируют в присутствии катализатора хлорид алюминия.",
+    StartingMaterial: "Толуол",
+    DensitySM: 0.87,
+    MolarMassSM: 92,
+    ResultMaterial: "Пара-хлорметилбензол",
+    DensityRM: 1.1,
+    MolarMassRM: 127
+  },					
   {
     ID: 2,
-    Title: "Очистка аспирина",
-    Src: defaultImage,
-    SrcUr: defaultImage,
-    Details: "Процесс очистки и кристаллизации аспирина для получения чистого продукта.",
-    StartingMaterial: "Сырой аспирин",
-    DensitySM: 1.35,
-    MolarMassSM: 180,
-    ResultMaterial: "Очищенный аспирин",
-    DensityRM: 1.40,
-    MolarMassRM: 180
-  },
-  {
-    ID: 3,
-    Title: "Синтез салициловой кислоты",
-    Src: defaultImage,
-    SrcUr: defaultImage,
-    Details: "Синтез салициловой кислоты из фенолята натрия и диоксида углерода.",
-    StartingMaterial: "Фенолят натрия",
-    DensitySM: 1.32,
-    MolarMassSM: 116,
+    Title: "Свободная салициловая кислота",
+    Src: defaultImage2,
+    SrcUr: defaultImage3,
+    Details: "Солевую форму салициловой кислоты переводят в свободную кислоту.",
+    StartingMaterial: "Натрия салицилат",
+    DensitySM: 1.7,
+    MolarMassSM: 160,
     ResultMaterial: "Салициловая кислота",
     DensityRM: 1.44,
     MolarMassRM: 138
+  },							
+  {
+    ID: 3,
+    Title: "Получение аспирина",
+    Src: defaultImage4,
+    SrcUr: defaultImage5,
+    Details: "Реакция салициловой кислоты и уксусной кислоты с катализатором - серной кислотой. Для расчета необходимо указать объем салициловой и уксусной кислот.",
+    StartingMaterial: "Салициловая кислота",
+    DensitySM: 1.44,
+    MolarMassSM: 138,
+    ResultMaterial: "Аспирин",
+    DensityRM: 1.44,
+    MolarMassRM: 180
   }
 ];
