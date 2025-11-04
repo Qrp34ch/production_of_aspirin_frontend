@@ -1,14 +1,14 @@
 import { type FC } from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { ROUTES } from '../../Routes';
+// import { Link } from 'react-router-dom';
+// import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+// import { ROUTES } from '../../Routes';
 import './HomePage.css';
+import { Carousel } from '../components/Carousel';
 
-export const HomePage: FC = () => {
-  return (
-    <div className="mainpage">
-      <div className="standartpage">
-        <Container>
+
+
+/* <Container>
+          
           <Row className="justify-content-center">
             <Col lg={10} xl={8}>
               <Card className="home-card">
@@ -37,7 +37,20 @@ export const HomePage: FC = () => {
               </Card>
             </Col>
           </Row>
-        </Container>
+        </Container> */
+
+
+
+
+export const HomePage: FC = () => {
+  return (
+    <div className="mainpage">
+      <div className="standartpage">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <Carousel />
       </div>
     </div>
   );

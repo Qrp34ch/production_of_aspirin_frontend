@@ -12,7 +12,7 @@ export const Navigation: FC = () => {
             🏠︎
           </Link>
           <Link to={ROUTES.REACTION} className="nav-home-link">
-            🧪
+            Реакции
           </Link>
         </div>
         <div className="nav-title">
