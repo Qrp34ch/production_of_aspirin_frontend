@@ -262,7 +262,7 @@ img {
     gap: 39px;
 
     width: 600px;
-    height: 600px;
+    height: auto;
 
     background: #FFFFFF;
     border-radius: 10px;

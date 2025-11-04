@@ -89,9 +89,9 @@ export const ReactionsPage: FC = () => {
                       <p className="text-details">Подробнее</p>
                     </div>
                   </Link>
-                  <button className="frame-18">
+                  {/* <button className="frame-18">
                     <span className="text-add">Добавить</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))
