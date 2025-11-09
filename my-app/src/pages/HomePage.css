@@ -54,3 +54,41 @@
 .reactions-btn:hover {
   background: #00332a;
 }
+
+@media (max-width: 768px) {
+  .home-card {
+    padding: 20px;
+    margin: 0 10px;
+  }
+  
+  .home-main-title {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+  
+  .welcome-text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .reactions-title {
+    font-size: 24px;
+  }
+  
+  .reactions-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-main-title {
+    font-size: 28px;
+  }
+  
+  .home-card {
+    padding: 15px;
+  }
+}

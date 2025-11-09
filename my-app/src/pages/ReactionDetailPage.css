@@ -5,7 +5,7 @@
   padding: 0px;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   background: var(--background-color);
 }
 
@@ -17,9 +17,9 @@
   align-content: flex-start;
   padding: 10px;
   gap: 20px;
-  width: 1160px;
+  width: 100%;
   max-width: 1240px;
-  height: 517.44px;
+  height: auto;
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -31,8 +31,8 @@
   align-items: center;
   padding: 22px 12px;
   gap: 20px;
-  width: 1140px;
-  height: 497.44px;
+  width: 100%;
+  height: auto;
   background: white;
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -42,7 +42,7 @@
 }
 
 .text-step-title {
-  width: 1116px;
+  width: 100%;
   height: 48px;
   font-family: 'Inter';
   font-style: normal;
@@ -63,12 +63,13 @@
   align-items: flex-start;
   padding: 0px;
   gap: 10px;
-  width: 1116px;
-  height: 385.44px;
+  width: 100%;
+  height: auto;
   flex: none;
   order: 1;
   align-self: stretch;
   flex-grow: 0;
+  overflow: hidden;
 }
 
 .frame-png {
@@ -91,11 +92,13 @@
   align-items: center;
   padding: 9px 0px;
   gap: 20px;
-  width: 880px;
-  height: 385.44px;
-  flex: none;
+  width: auto;
+  height: auto;
+  flex: 1;
   order: 1;
   flex-grow: 1;
+  /* flex: 1; */
+  min-width: 0;
 }
 
 .frame-text-details {
@@ -103,9 +106,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px;
-  width: 880px;
-  height: 156px;
+  padding: 0px 10px;
+  width: auto;
+  height: auto;
   flex: none;
   order: 0;
   align-self: stretch;
@@ -113,8 +116,8 @@
 }
 
 .text-step-details {
-  width: 880px;
-  height: 156px;
+  width: auto;
+  height: auto;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -129,8 +132,8 @@
 }
 
 .formula {
-  width: 880px;
-  height: 191.44px;
+  width: 100%;
+  height: auto;
   object-fit: contain;
   flex: none;
   order: 1;
@@ -158,4 +161,66 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+}
+
+@media (max-width: 768px) {
+  .step-details {
+    width: 100%;
+    max-width: 100%;
+    padding: 5px;
+  }
+  
+  .frame-step {
+    width: 100%;
+    padding: 15px 10px;
+    gap: 15px;
+  }
+  
+  .text-step-title {
+    width: 100%;
+    font-size: 28px;
+    height: auto;
+  }
+  
+  .frame-666 {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 20px;
+  }
+  
+  .frame-png {
+    width: 100%;
+    height: auto;
+  }
+  
+  .image {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+  }
+  
+  .frame-details {
+    width: 100%;
+    height: auto;
+  }
+  
+  .frame-text-details {
+    width: 100%;
+    height: auto;
+  }
+  
+  .text-step-details {
+    width: 100%;
+    font-size: 18px;
+    line-height: 1.4;
+    height: auto;
+    text-align: left;
+  }
+  
+  .formula {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+  }
 }

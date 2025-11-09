@@ -34,9 +34,21 @@
 }
 
 .mainpage {
-  padding-top: 88px;
+  padding-top: 80px; 
 }
 
 .standartpage {
   padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .mainpage {
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainpage {
+    padding-top: 65px;
+  }
 }
