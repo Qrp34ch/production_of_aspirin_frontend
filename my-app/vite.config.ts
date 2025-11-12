@@ -81,6 +81,7 @@ export default defineConfig({
     sourcemap: false // Отключаем sourcemaps для уменьшения размера
   },
   server: { 
+    host: '0.0.0.0',
     port: 3000,
     proxy: {
       '/API': {
