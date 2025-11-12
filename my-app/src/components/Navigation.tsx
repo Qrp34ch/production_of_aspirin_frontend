@@ -44,12 +44,8 @@ export const Navigation: FC = () => {
           <Link 
             to={ROUTES.HOME} 
             className={`navi-link ${location.pathname === ROUTES.HOME ? 'active' : ''}`}
-            onClick={(e) => {
-              if (window.matchMedia('(display-mode: standalone)').matches) {
-                e.preventDefault();
-              }
-              closeMenu();
-            }}
+            onClick={closeMenu}
+            rel="noopener noreferrer"
           >
             🏠︎
           </Link>
