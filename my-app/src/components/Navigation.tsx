@@ -5,6 +5,10 @@ import './Navigation.css';
 
 export const Navigation: FC = () => {
   const location = useLocation();
+  console.log('Current pathname:', location.pathname);
+  console.log('ROUTES.HOME:', ROUTES.HOME);
+  console.log('Match:', location.pathname === ROUTES.HOME);
+  console.log('Is PWA:', window.matchMedia('(display-mode: standalone)').matches);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
