@@ -30,6 +30,7 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'prompt',
+      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
         name: 'Производство аспирина',
         short_name: 'Аспирин',
@@ -54,7 +55,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/RIP_frontend/index.html'
+        navigateFallback: '/RIP_frontend/index.html',
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true
       }
     })
   ],
