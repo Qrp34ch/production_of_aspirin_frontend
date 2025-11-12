@@ -84,11 +84,11 @@ define(['./workbox-f6195dc0'], (function (workbox) { 'use strict';
     "url": "registerSW.js",
     "revision": "3900377f35b60e3207eb55ccfc1b5a68"
   }, {
-    "url": "/RIP_frontend/index.html",
-    "revision": "0.o7ke64nrp6o"
+    "url": "index.html",
+    "revision": "0.v853t8d24a"
   }], {});
   workbox.cleanupOutdatedCaches();
-  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/RIP_frontend/index.html"), {
+  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
     allowlist: [/^\/$/]
   }));
   workbox.registerRoute(/^https:\/\/localhost:9000\/.*/i, new workbox.CacheFirst({
