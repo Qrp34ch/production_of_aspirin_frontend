@@ -18,7 +18,7 @@ export const Navigation: FC = () => {
   return (
     <div className="custom-navbar">
       <div className="nav-header">
-        {/* Бургер-меню для мобильных */}
+        {/* Бургер-меню для мобильных  🏠︎*/}
         <button 
           className={`burger-menu ${isMenuOpen ? 'active' : ''}`}
           onClick={toggleMenu}
@@ -35,7 +35,7 @@ export const Navigation: FC = () => {
             className={`navi-link ${location.pathname === ROUTES.HOME ? 'active' : ''}`}
             onClick={closeMenu}
           >
-            🏠︎
+            Д
           </Link>
           <Link 
             to={ROUTES.REACTION} 
