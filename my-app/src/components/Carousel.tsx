@@ -37,7 +37,7 @@ export const Carousel: FC = () => {
             className="d-block w-100 carousel-image" 
             alt="Производство аспирина - этап 1" 
           />
-          <div className="carousel-caption d-none d-md-block">
+          <div className="carousel-caption">
             <h5>Поиск</h5>
             <p>Ищите необходимые химические реакции для изучения</p>
           </div>
@@ -49,7 +49,7 @@ export const Carousel: FC = () => {
             className="d-block w-100 carousel-image" 
             alt="Производство аспирина - этап 2" 
           />
-          <div className="carousel-caption d-none d-md-block">
+          <div className="carousel-caption">
             <h5>Расчеты</h5>
             <p>Рассчитывайте теоретический выход в реакциях</p>
           </div>
@@ -61,7 +61,7 @@ export const Carousel: FC = () => {
             className="d-block w-100 carousel-image" 
             alt="Производство аспирина - этап 3" 
           />
-          <div className="carousel-caption d-none d-md-block">
+          <div className="carousel-caption">
             <h5>Сохранение</h5>
             <p>Сохраните расчеты для дальнейшего исследования</p>
           </div>
