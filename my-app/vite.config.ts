@@ -40,6 +40,7 @@ export default defineConfig({
         background_color: '#EBF8F6',
         display: 'standalone',
         start_url: '/RIP_frontend/',
+        scope: '/RIP_frontend/',
         icons: [
           {
             src: 'A.png',
