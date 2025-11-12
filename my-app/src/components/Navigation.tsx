@@ -32,10 +32,10 @@ export const Navigation: FC = () => {
         <div className="nav-links-desktop">
           <Link 
             to={ROUTES.HOME} 
-            className={`navi-link ${location.pathname === ROUTES.HOME ? 'active' : ''}`}
+            className={`navi-link ${location.pathname.startsWith(ROUTES.HOME) ? 'active' : ''}`}
             onClick={closeMenu}
           >
-            Д
+            🏠︎
           </Link>
           <Link 
             to={ROUTES.REACTION} 
