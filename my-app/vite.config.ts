@@ -21,6 +21,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import mkcert from 'vite-plugin-mkcert'
+import fs from 'fs'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -29,8 +32,11 @@ export default defineConfig({
     react({
       jsxRuntime: 'automatic'
     }),
+    mkcert(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // registerType: 'autoUpdate',
+      registerType: 'prompt', // Измените на prompt
+      injectRegister: 'auto',
       includeAssets: ['favicon.ico'],
       manifest: {
         name: 'Производство аспирина',
@@ -74,8 +80,11 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: false // Включаем PWA в development для тестирования
-      }
+        enabled: true, // Включаем PWA в development для тестирования
+        type: 'module', // Используйте module для dev
+        navigateFallback: 'index.html'
+      },
+      strategies: 'injectManifest'
     })
   ],
   build: {
@@ -85,6 +94,10 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 3000,
     strictPort: true,
+    https: { // ← Добавьте эту секцию
+      key: fs.readFileSync(path.resolve(__dirname, 'cert.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'cert.crt')),
+    },
     proxy: {
       '/API': {
         target: 'http://localhost:8080',
