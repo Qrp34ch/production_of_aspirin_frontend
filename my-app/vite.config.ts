@@ -27,7 +27,7 @@ export default defineConfig({
   base: '/RIP_frontend/',
   plugins: [
     react({
-      jsxRuntime: 'classic'
+      jsxRuntime: 'automatic'
     }),
     VitePWA({
       registerType: 'autoUpdate',
@@ -73,10 +73,13 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: true // Включаем PWA в development для тестирования
+        enabled: false // Включаем PWA в development для тестирования
       }
     })
   ],
+  build: {
+    sourcemap: false // Отключаем sourcemaps для уменьшения размера
+  },
   server: { 
     port: 3000,
     proxy: {
