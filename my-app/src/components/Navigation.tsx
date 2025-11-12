@@ -34,10 +34,22 @@ export const Navigation: FC = () => {
         </button>
 
         <div className="nav-links-desktop">
-          <Link 
+          {/* <Link 
             to={ROUTES.HOME} 
             className={`navi-link ${location.pathname.startsWith(ROUTES.HOME) ? 'active' : ''}`}
             onClick={closeMenu}
+          >
+            🏠︎
+          </Link> */}
+          <Link 
+            to={ROUTES.HOME} 
+            className={`navi-link ${location.pathname === ROUTES.HOME ? 'active' : ''}`}
+            onClick={(e) => {
+              if (window.matchMedia('(display-mode: standalone)').matches) {
+                e.preventDefault();
+              }
+              closeMenu();
+            }}
           >
             🏠︎
           </Link>
