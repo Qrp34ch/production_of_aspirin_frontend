@@ -1,8 +1,6 @@
-// src/components/PWAInstallPrompt.tsx
 import { type FC, useState, useEffect } from 'react';
 import './PWAInstallPrompt.css';
 
-// Тип для BeforeInstallPromptEvent
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
@@ -14,17 +12,13 @@ export const PWAInstallPrompt: FC = () => {
 
   useEffect(() => {
     const handler = (e: BeforeInstallPromptEvent) => {
-      // Предотвращаем автоматическое отображение браузерного промпта
       e.preventDefault();
-      // Сохраняем событие для использования позже
       setDeferredPrompt(e);
-      // Показываем наш кастомный промпт
       setIsVisible(true);
     };
 
     window.addEventListener('beforeinstallprompt', handler as EventListener);
 
-    // Проверяем, установлено ли уже приложение
     if (window.matchMedia('(display-mode: standalone)').matches) {
       console.log('Приложение запущено в standalone режиме');
     }
@@ -37,10 +31,8 @@ export const PWAInstallPrompt: FC = () => {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    // Показываем браузерный промпт установки
     deferredPrompt.prompt();
 
-    // Ждем выбора пользователя
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === 'accepted') {
@@ -49,7 +41,6 @@ export const PWAInstallPrompt: FC = () => {
       console.log('Пользователь отклонил установку PWA');
     }
 
-    // Очищаем сохраненное событие
     setDeferredPrompt(null);
     setIsVisible(false);
   };

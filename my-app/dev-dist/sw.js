@@ -67,13 +67,10 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-99d8380f'], (function (workbox) { 'use strict';
+define(['./workbox-54d0af47'], (function (workbox) { 'use strict';
 
-  self.addEventListener('message', event => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      self.skipWaiting();
-    }
-  });
+  self.skipWaiting();
+  workbox.clientsClaim();
 
   /**
    * The precacheAndRoute() method efficiently caches and responds to
@@ -84,11 +81,11 @@ define(['./workbox-99d8380f'], (function (workbox) { 'use strict';
     "url": "registerSW.js",
     "revision": "3900377f35b60e3207eb55ccfc1b5a68"
   }, {
-    "url": "/RIP_frontend/index.html",
-    "revision": "0.vonqmb2kll8"
+    "url": "/index.html",
+    "revision": "0.5ohoek9t4tg"
   }], {});
   workbox.cleanupOutdatedCaches();
-  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/RIP_frontend/index.html"), {
+  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/index.html"), {
     allowlist: [/^\/$/]
   }));
 

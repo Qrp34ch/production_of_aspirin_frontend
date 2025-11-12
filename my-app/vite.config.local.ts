@@ -5,9 +5,8 @@ import mkcert from 'vite-plugin-mkcert'
 import fs from 'fs'
 import path from 'path'
 
-// Конфиг для локальной разработки с HTTPS
 export default defineConfig({
-  base: '/RIP_frontend/',
+  base: '/',
   plugins: [
     react({
       jsxRuntime: 'automatic'
@@ -15,6 +14,7 @@ export default defineConfig({
     mkcert(),
     VitePWA({
       registerType: 'prompt',
+      includeAssets: ['favicon.ico'],
       manifest: {
         name: 'Производство аспирина',
         short_name: 'Аспирин',
@@ -22,8 +22,8 @@ export default defineConfig({
         theme_color: '#00A88F',
         background_color: '#EBF8F6',
         display: 'standalone',
-        start_url: '/RIP_frontend/',
-        scope: '/RIP_frontend/',
+        start_url: '/',
+        scope: '/',
         icons: [
           {
             src: 'A.png',
@@ -39,10 +39,14 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/RIP_frontend/index.html'
+        navigateFallback: '/index.html',
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true
       },
       devOptions: {
-        enabled: true
+        enabled: true,
+        type: 'module'
       }
     })
   ],
