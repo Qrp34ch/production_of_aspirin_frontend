@@ -7,6 +7,7 @@ import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { setSearchQuery, resetFilters, clearSearch } from '../store/filterSlice';
 import './ReactionsPage.css';
 import search from "../assets/search.png"
+import synthesispng from "../assets/korzina.png"
 import { BreadCrumbs } from '../components/BreadCrumbs';
 
 export const ReactionsPage: FC = () => {
@@ -157,14 +158,14 @@ export const ReactionsPage: FC = () => {
           <div className="foot">
             {synthesisCount > 0 ? (
               <Link to="/synthesis/1" className="cart-link">
-                <img src="http://localhost:9000/aspirinimages/img/korzina.png" className="cart" alt="cart" />
+                <img src={synthesispng} className="cart" alt="cart" />
                 <div className="cart-indicator">
                   <span className="cart-count">{synthesisCount}</span>
                 </div>
               </Link>
             ) : (
               <span className="cart-link disabled">
-                <img src="http://localhost:9000/aspirinimages/img/korzina.png" className="cart" alt="cart" />
+                <img src={synthesispng} className="cart" alt="cart" />
               </span>
             )}
           </div>

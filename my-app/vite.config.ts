@@ -34,8 +34,8 @@ export default defineConfig({
     }),
     mkcert(),
     VitePWA({
-      // registerType: 'autoUpdate',
-      registerType: 'prompt', // Измените на prompt
+      registerType: 'autoUpdate',
+      // registerType: 'prompt', // Измените на prompt
       injectRegister: 'auto',
       includeAssets: ['favicon.ico'],
       manifest: {
@@ -81,9 +81,9 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: false, // Включаем PWA в development для тестирования
-        type: 'module', // Используйте module для dev
-        navigateFallback: 'index.html'
+        enabled: false // Включаем PWA в development для тестирования
+        // type: 'module', // Используйте module для dev
+        // navigateFallback: 'index.html'
       },
       // strategies: 'injectManifest'
     })
