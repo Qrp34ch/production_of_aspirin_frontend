@@ -24,8 +24,11 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/RIP_frontend/',
   plugins: [
-    react(),
+    react({
+      jsxRuntime: 'classic'
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico'],
@@ -36,7 +39,7 @@ export default defineConfig({
         theme_color: '#00A88F',
         background_color: '#EBF8F6',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/RIP_frontend/',
         icons: [
           {
             src: 'A.png',
