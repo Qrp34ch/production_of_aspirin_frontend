@@ -11,8 +11,8 @@ export const BreadCrumbs: FC = () => {
   const location = useLocation();
 
   const getBreadcrumbs = (): Crumb[] => {
-    const path = location.pathname.replace('/RIP_frontend', '');
-    if (path === '/') {
+    // const path = location.pathname.replace('/RIP_frontend', '');
+    if (location.pathname === '/') {
       return [];
     }
 
