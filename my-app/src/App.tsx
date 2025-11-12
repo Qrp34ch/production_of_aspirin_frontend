@@ -38,7 +38,8 @@ import './App.css';
 
 const App: FC = () => {
   return (
-    <BrowserRouter basename="/RIP_frontend">
+    // <BrowserRouter basename="/RIP_frontend">
+    <BrowserRouter>
       <div className="App">
         <Navigation />
         <Routes>
