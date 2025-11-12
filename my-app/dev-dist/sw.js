@@ -67,7 +67,7 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-f6195dc0'], (function (workbox) { 'use strict';
+define(['./workbox-99d8380f'], (function (workbox) { 'use strict';
 
   self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
@@ -85,20 +85,11 @@ define(['./workbox-f6195dc0'], (function (workbox) { 'use strict';
     "revision": "3900377f35b60e3207eb55ccfc1b5a68"
   }, {
     "url": "/RIP_frontend/index.html",
-    "revision": "0.jg8oifkalq8"
+    "revision": "0.vonqmb2kll8"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/RIP_frontend/index.html"), {
     allowlist: [/^\/$/]
   }));
-  workbox.registerRoute(/^https:\/\/localhost:9000\/.*/i, new workbox.CacheFirst({
-    "cacheName": "aspirin-images-cache",
-    plugins: [new workbox.ExpirationPlugin({
-      maxEntries: 50,
-      maxAgeSeconds: 2592000
-    }), new workbox.CacheableResponsePlugin({
-      statuses: [0, 200]
-    })]
-  }), 'GET');
 
 }));
