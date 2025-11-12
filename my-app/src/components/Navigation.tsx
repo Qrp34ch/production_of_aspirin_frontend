@@ -1,10 +1,11 @@
 import { type FC, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../Routes';
 import './Navigation.css';
 
 export const Navigation: FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   console.log('Current pathname:', location.pathname);
   console.log('ROUTES.HOME:', ROUTES.HOME);
   console.log('Match:', location.pathname === ROUTES.HOME);
@@ -17,6 +18,19 @@ export const Navigation: FC = () => {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleNavigation = (path: string) => {
+    closeMenu();
+    navigate(path);
+  };
+
+  // Функция для проверки активного пути
+  const isActivePath = (path: string) => {
+    if (path === ROUTES.HOME) {
+      return location.pathname === ROUTES.HOME;
+    }
+    return location.pathname.startsWith(path);
   };
 
   return (
@@ -41,14 +55,12 @@ export const Navigation: FC = () => {
           >
             🏠︎
           </Link> */}
-          <Link 
-            to={ROUTES.HOME} 
-            className={`navi-link ${location.pathname === ROUTES.HOME ? 'active' : ''}`}
-            onClick={closeMenu}
-            rel="noopener noreferrer"
+          <button 
+            onClick={() => handleNavigation(ROUTES.HOME)}
+            className={`navi-link ${isActivePath(ROUTES.HOME) ? 'active' : ''}`}
           >
             🏠︎
-          </Link>
+          </button>
           <Link 
             to={ROUTES.REACTION} 
             className={`navi-link ${location.pathname.startsWith(ROUTES.REACTION) ? 'active' : ''}`}
