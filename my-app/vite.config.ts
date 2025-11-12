@@ -43,12 +43,12 @@ export default defineConfig({
         scope: '/RIP_frontend/',
         icons: [
           {
-            src: '/RIP_frontend/A.png',
+            src: 'A.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/RIP_frontend/A512.png',
+            src: 'A512.png',
             sizes: '512x512',
             type: 'image/png'
           }

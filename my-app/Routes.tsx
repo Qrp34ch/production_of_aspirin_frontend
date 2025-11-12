@@ -1,7 +1,7 @@
 export const ROUTES = {
-  HOME: "/RIP_frontend/",
-  REACTION: "/RIP_frontend/reaction",
-  REACTION_DETAIL: "/RIP_frontend/reaction/:id",
+  HOME: "/",
+  REACTION: "/reaction",
+  REACTION_DETAIL: "/reaction/:id",
 };
 
 export type RouteKeyType = keyof typeof ROUTES;
