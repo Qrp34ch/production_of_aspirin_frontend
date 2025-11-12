@@ -11,18 +11,18 @@ export const BreadCrumbs: FC = () => {
   const location = useLocation();
 
   const getBreadcrumbs = (): Crumb[] => {
-    // const path = location.pathname.replace('/RIP_frontend', '');
-    if (location.pathname === '/') {
+    const path = location.pathname.replace('/RIP_frontend', '');
+    if (path === '/') {
       return [];
     }
 
-    const pathSegments = location.pathname.split('/').filter(segment => segment);
+    const pathSegments = path.split('/').filter(segment => segment);
 
     const crumbs: Crumb[] = [
       { label: 'Главная', path: '/' }
     ];
 
-    if (location.pathname === '/reaction' || pathSegments[0] === 'reaction') {
+    if (path === '/reaction' || pathSegments[0] === 'reaction') {
       if (pathSegments.length === 1) {
         crumbs.push({ label: 'Реакции' });
       } else if (pathSegments.length >= 2) {
