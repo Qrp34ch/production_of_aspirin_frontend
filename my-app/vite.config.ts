@@ -49,12 +49,12 @@ export default defineConfig({
         scope: '/RIP_frontend/',
         icons: [
           {
-            src: '/RIP_frontend/A.png',
+            src: 'A.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/RIP_frontend/A512.png',
+            src: 'A512.png',
             sizes: '512x512',
             type: 'image/png'
           }
@@ -62,6 +62,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallback: '/RIP_frontend/index.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/localhost:9000\/.*/i,
@@ -80,11 +81,11 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: true, // Включаем PWA в development для тестирования
+        enabled: false, // Включаем PWA в development для тестирования
         type: 'module', // Используйте module для dev
         navigateFallback: 'index.html'
       },
-      strategies: 'injectManifest'
+      // strategies: 'injectManifest'
     })
   ],
   build: {
