@@ -8,6 +8,7 @@ import { setSearchQuery, resetFilters, clearSearch } from '../store/filterSlice'
 import './ReactionsPage.css';
 import search from "../assets/search.png"
 import synthesispng from "../assets/korzina.png"
+import defimage from "../assets/DefaultImage.jpg"
 import { BreadCrumbs } from '../components/BreadCrumbs';
 
 export const ReactionsPage: FC = () => {
@@ -130,7 +131,7 @@ export const ReactionsPage: FC = () => {
                 <div key={reaction.ID} className="step">
                   <p className="step-name">{reaction.Title}</p>
                   <img 
-                    src={reaction.Src || '/static/images/default-reaction.jpg'} 
+                    src={reaction.Src || defimage} 
                     className="image" 
                     alt={reaction.Title} 
                   />
