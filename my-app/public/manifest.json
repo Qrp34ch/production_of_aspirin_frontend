@@ -1,0 +1,22 @@
+{
+  "name": "Производство аспирина",
+  "short_name": "Аспирин",
+  "description": "Веб-сервис по производству аспирина с этапами химических реакций",
+  "theme_color": "#00A88F",
+  "background_color": "#EBF8F6",
+  "display": "standalone",
+  "start_url": "/RIP_frontend/",
+  "scope": "/RIP_frontend/",
+  "icons": [
+    {
+      "src": "A.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "A512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
