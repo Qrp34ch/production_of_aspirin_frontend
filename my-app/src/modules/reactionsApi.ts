@@ -1,6 +1,9 @@
 import { type Reaction } from '../modules/type';
 import { getApiBaseUrl } from '../config/api';
 
+// Проверка: запущено ли приложение в Tauri?
+const isTauri = typeof window !== 'undefined' && (window as any).TAURI !== undefined;
+
 const API_BASE = getApiBaseUrl();
 
 export const getReactions = async (query?: string): Promise<Reaction[]> => {
@@ -10,9 +13,23 @@ export const getReactions = async (query?: string): Promise<Reaction[]> => {
       : `${API_BASE}/reaction`;
     
     console.log('API Request:', url); 
-    
-    const response = await fetch(url);
-    
+
+    let response: Response;
+
+    if (isTauri) {
+      // Используем Tauri HTTP plugin
+      const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http');
+      response = await tauriFetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      // Обычный fetch в браузере
+      response = await fetch(url);
+    }
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -37,7 +54,20 @@ export const getReactions = async (query?: string): Promise<Reaction[]> => {
 
 export const getReaction = async (id: number): Promise<Reaction> => {
   try {
-    const response = await fetch(`${API_BASE}/reaction/${id}`);
+    const url = `${API_BASE}/reaction/${id}`;
+    let response: Response;
+
+    if (isTauri) {
+      const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http');
+      response = await tauriFetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      response = await fetch(url);
+    }
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
