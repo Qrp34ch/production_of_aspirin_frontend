@@ -5,6 +5,7 @@ import { REACTIONS_MOCK } from '../modules/mock';
 import { getReaction } from '../modules/reactionsApi';
 import { BreadCrumbs } from '../components/BreadCrumbs';
 import defaultImage from "../assets/DefaultImage.jpg"
+import defimage from "../assets/DefaultImage5.jpg"
 import './ReactionDetailPage.css';
 
 export const ReactionDetailPage: FC = () => {
@@ -93,7 +94,7 @@ export const ReactionDetailPage: FC = () => {
                   <p className="text-step-details"><span className="text-step-details">{reaction.Details}</span></p>
                 </div>
                 {reaction.SrcUr && (
-                  <img src={reaction.SrcUr} className="formula" alt="formula" />
+                  <img src={reaction.SrcUr || defimage} className="formula" alt="formula" />
                 )}
               </div>
             </div>
