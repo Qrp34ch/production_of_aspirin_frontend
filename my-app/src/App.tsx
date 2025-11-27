@@ -7,7 +7,7 @@ import { HomePage } from './pages/HomePage';
 import { ReactionsPage } from './pages/ReactionsPage';
 import { ReactionDetailPage } from './pages/ReactionDetailPage';
 import { ROUTES } from '../Routes';
-import { BASE_PATH } from './target_config';
+// import { BASE_PATH } from './target_config';
 import './App.css';
 
 const App: FC = () => {
@@ -17,7 +17,7 @@ const App: FC = () => {
     }
   }, []);
   return (
-    <BrowserRouter basename={BASE_PATH}>
+    <BrowserRouter basename="/RIP_frontend">
       <div className="App">
         <Navigation />
         <Routes>
