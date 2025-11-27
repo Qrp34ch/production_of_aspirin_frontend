@@ -1,0 +1,244 @@
+.profile-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+  padding-top: 80px;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 80px);
+  padding: 20px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 500px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  background: white;
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-2px);
+}
+
+.profile-card .card-body {
+  padding: 2rem;
+}
+
+.profile-title {
+  color: #00A88F;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.75rem;
+}
+
+.profile-subtitle {
+  color: #666;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.profile-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.profile-form .form-label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.profile-form .form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.profile-form .form-control:focus {
+  border-color: #00A88F;
+  box-shadow: 0 0 0 0.2rem rgba(0, 168, 143, 0.25);
+}
+
+.profile-form .form-control:disabled {
+  background-color: #f8f9fa;
+  opacity: 0.7;
+}
+
+.save-button {
+  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.save-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 168, 143, 0.3);
+}
+
+.save-button:disabled {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
+}
+
+.alert {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 1.5rem;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .profile-page {
+    padding-top: 70px;
+  }
+  
+  .profile-container {
+    padding: 15px;
+  }
+  
+  .profile-card {
+    max-width: 100%;
+  }
+  
+  .profile-card .card-body {
+    padding: 1.5rem;
+  }
+  
+  .profile-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-page {
+    padding-top: 60px;
+  }
+  
+  .profile-container {
+    padding: 10px;
+  }
+  
+  .profile-card .card-body {
+    padding: 1.25rem;
+  }
+  
+  .profile-title {
+    font-size: 1.25rem;
+  }
+  
+  .profile-form .form-control {
+    padding: 10px;
+  }
+  
+  .save-button {
+    padding: 10px 20px;
+  }
+}
+
+/* Стили для состояния загрузки */
+.loading-overlay {
+  position: relative;
+}
+
+.loading-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+}
+
+/* Дополнительные стили для улучшения UX */
+.password-note {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.field-required::after {
+  content: " *";
+  color: #dc3545;
+}
+
+/* Стили для успешного обновления */
+.update-success {
+  border-left: 4px solid #28a745;
+}
+
+/* Ховер эффекты */
+.form-control:hover {
+  border-color: #00A88F;
+}
+
+/* Кастомные стили для спиннера */
+.btn:disabled .spinner-border {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Улучшенные отступы */
+.profile-form .form-group:last-of-type {
+  margin-bottom: 2rem;
+}
+
+/* Стили для заголовков секций */
+.section-title {
+  color: #00A88F;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}

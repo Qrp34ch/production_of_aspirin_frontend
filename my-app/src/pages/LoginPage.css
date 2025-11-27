@@ -1,0 +1,84 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+  padding-top: 80px;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  background: white;
+}
+
+.login-title {
+  color: #00A88F;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  color: #666;
+  margin-bottom: 0;
+}
+
+.login-button {
+  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 168, 143, 0.3);
+}
+
+.login-button:disabled {
+  background: #6c757d;
+}
+
+.register-link {
+  color: #666;
+}
+
+.register-link a {
+  color: #00A88F;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link a:hover {
+  color: #004E42;
+  text-decoration: underline;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #00A88F;
+  box-shadow: 0 0 0 0.2rem rgba(0, 168, 143, 0.25);
+}

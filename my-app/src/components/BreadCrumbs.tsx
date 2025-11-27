@@ -31,6 +31,19 @@ export const BreadCrumbs: FC = () => {
         crumbs.push({ label: `Реакция ${reactionId}` });
       }
     }
+    // Обработка маршрутов для синтезов
+    if (path === '/syntheses' || pathSegments[0] === 'syntheses') {
+      if (pathSegments.length === 1) {
+        crumbs.push({ label: 'Мои синтезы' });
+      }
+    }
+
+    // Обработка маршрута для деталей синтеза
+    if (pathSegments[0] === 'synthesis' && pathSegments.length >= 2) {
+      crumbs.push({ label: 'Мои синтезы', path: '/syntheses' });
+      const synthesisId = pathSegments[1];
+      crumbs.push({ label: `Синтез ${synthesisId}` });
+    }
     return crumbs;
   };
 

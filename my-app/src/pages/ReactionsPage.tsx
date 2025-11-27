@@ -5,6 +5,7 @@ import { REACTIONS_MOCK } from '../modules/mock';
 import { getReactions } from '../modules/reactionsApi';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { setSearchQuery, resetFilters, clearSearch } from '../store/filterSlice';
+import { getSynthesisIcon, addReactionToSynthesis } from '../slices/synthesisSlice';
 import './ReactionsPage.css';
 import search from "../assets/search.png"
 import synthesispng from "../assets/korzina.png"
@@ -15,14 +16,23 @@ import { transformImageUrl } from '../target_config';
 export const ReactionsPage: FC = () => {
   const dispatch = useAppDispatch();
   const { searchQuery } = useAppSelector((state) => state.filters);
+  const { synthesisIcon } = useAppSelector((state) => state.synthesis);
+  const { isAuthenticated } = useAppSelector((state) => state.user);
   
   const [loading, setLoading] = useState(false);
   const [reactions, setReactions] = useState<Reaction[]>([]);
-  const [synthesisCount] = useState(0);
+  // const [synthesisCount] = useState(0);
 
   useEffect(() => {
     loadReactions();
-  }, []);
+    if (isAuthenticated) {
+      console.log('Загружаем корзину для авторизованного пользователя');
+      dispatch(getSynthesisIcon()).then((result) => {
+        console.log('Результат загрузки корзины:', result);
+        console.log('Текущее состояние synthesisIcon:', synthesisIcon);
+      });
+    }
+  }, [dispatch, isAuthenticated]);
 
   const loadReactions = async (query: string = searchQuery) => {
     setLoading(true);
@@ -59,6 +69,16 @@ export const ReactionsPage: FC = () => {
   const handleClearSearch = () => {
     dispatch(clearSearch());
     loadReactions('');
+  };
+  const handleAddReaction = async (reactionId: number) => {
+    try {
+      await dispatch(addReactionToSynthesis(reactionId));
+      // Показать уведомление об успехе
+      await dispatch(getSynthesisIcon());
+      alert('Реакция добавлена в синтез');
+    } catch (error) {
+      alert('Ошибка при добавлении реакции');
+    }
   };
 
   return (
@@ -151,6 +171,13 @@ export const ReactionsPage: FC = () => {
                         <p className="text-add">Добавить</p>
                       </div>
                     </Link>                 */}
+                    {isAuthenticated && (
+                      <div className="frame-18" onClick={() => handleAddReaction(reaction.ID)}>
+                        <div></div>
+                        <div></div>
+                        <p className="text-add">Добавить</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
@@ -158,11 +185,11 @@ export const ReactionsPage: FC = () => {
           </div>
 
           <div className="foot">
-            {synthesisCount > 0 ? (
-              <Link to="/synthesis/1" className="cart-link">
+            {isAuthenticated && synthesisIcon?.id ? (
+              <Link to={`/synthesis/${synthesisIcon.id}`} className="cart-link">
                 <img src={synthesispng} className="cart" alt="cart" />
                 <div className="cart-indicator">
-                  <span className="cart-count">{synthesisCount}</span>
+                  <span className="cart-count">{synthesisIcon.count}</span>
                 </div>
               </Link>
             ) : (

@@ -328,3 +328,64 @@
 .mobile-menu.open .mobile-nav-link:nth-child(2) {
   animation-delay: 0.2s;
 }
+.nav-auth-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  color: white;
+  font-family: 'Inter';
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.auth-links {
+  display: flex;
+  gap: 15px;
+}
+
+.synthesis-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.synthesis-icon.disabled {
+  opacity: 0.5;
+}
+
+.synthesis-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .nav-auth-section {
+    display: none;
+  }
+  
+  .user-name {
+    font-size: 14px;
+  }
+}

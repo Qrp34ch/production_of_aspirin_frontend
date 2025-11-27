@@ -1,0 +1,671 @@
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.synthesis-page {
+    width: 100%;
+    min-height: 100vh;
+    background: #EBF8F6;
+    padding-top: 80px;
+}
+
+.synthesis-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #EBF8F6;
+}
+
+/* User Info Section */
+.user-info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
+    width: 100%;
+    max-width: 960px;
+}
+
+.user-name-field,
+.date-field {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    gap: 10px;
+    width: 100%;
+}
+
+.field-label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 39px;
+    color: #000000;
+    min-width: 200px;
+}
+
+.field-value {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 710px;
+    height: 55px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-family: 'Inter';
+    font-size: 24px;
+}
+
+/* Calculation Fields */
+.calculation-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    gap: 10px;
+    width: 100%;
+    max-width: 960px;
+}
+
+.section-title {
+    width: 100%;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 39px;
+    color: #000000;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.purity-field,
+.reaction-volume-field {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+    width: 100%;
+}
+
+.field-input-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+}
+
+.field-input {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    font-family: 'Inter';
+    font-size: 24px;
+    width: 200px;
+    text-align: center;
+}
+
+/* .save-purity-btn {
+    margin-left: 10px;
+} */
+
+.save-purity-btn {
+  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+  color: #FFFFFF;
+  font-family: 'Inter';
+  font-size: 16px;
+  min-width: 120px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.save-purity-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 168, 143, 0.3);
+  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+}
+
+.save-purity-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.save-purity-btn:disabled {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+/* Reactions Header and Content */
+.reactions-header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.reactions-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 12px;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    background: #00A88F;
+    border-radius: 10px;
+}
+
+.materials-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+.image-placeholder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.starting-material-header,
+.result-material-header {
+    flex: 1;
+}
+
+.material-titles {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 100%;
+}
+
+.material-title {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 39px;
+    text-align: center;
+    color: #000000;
+    flex: 1;
+}
+
+.result-material-header {
+    background: #00A88F;
+}
+
+.result-material-header .material-title {
+    color: #FFFFFF;
+}
+
+.property-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    flex: 1;
+}
+
+.result-material-header .property-column span {
+    color: #FFFFFF;
+}
+
+/* Reactions List */
+.reactions-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.reaction-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 12px;
+    gap: 20px;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+.reaction-title {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 48px;
+    text-align: center;
+    color: #000000;
+    width: 100%;
+}
+
+.reaction-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+.reaction-image {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.reaction-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.material-data {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 100%;
+}
+
+.material-name {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 39px;
+    text-align: center;
+    color: #000000;
+    flex: 1;
+}
+
+.result-material-header .material-name {
+    color: #FFFFFF;
+}
+
+.property-value {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    flex: 1;
+}
+
+.result-material-header .property-value span {
+    color: #FFFFFF;
+}
+
+.volume-display {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 39px;
+    text-align: center;
+    color: #000000;
+}
+
+.result-material-header .volume-display {
+    color: #FFFFFF;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.action-btn {
+    min-width: 200px;
+    padding: 12px 24px;
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Loading and Error States */
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 20px;
+}
+
+.no-reactions-message,
+.empty-synthesis {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.empty-synthesis .alert {
+    margin: 0;
+}
+
+/* ========== АДАПТИВНОСТЬ ========== */
+
+/* Планшеты (768px - 1024px) */
+@media (max-width: 1024px) {
+    .synthesis-container {
+        padding: 15px;
+        max-width: 95%;
+    }
+    
+    .field-label {
+        font-size: 28px;
+        line-height: 36px;
+        min-width: 180px;
+    }
+    
+    .field-value {
+        font-size: 20px;
+        height: 50px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+        line-height: 36px;
+    }
+    
+    .reaction-title {
+        font-size: 32px;
+        line-height: 40px;
+    }
+    
+    .material-title,
+    .material-name {
+        font-size: 18px;
+        line-height: 32px;
+    }
+    
+    .field-input {
+        font-size: 20px;
+        padding: 8px 15px;
+        width: 150px;
+    }
+}
+
+/* Мобильные устройства (576px - 768px) */
+@media (max-width: 768px) {
+    .synthesis-page {
+        padding-top: 70px;
+    }
+    
+    .synthesis-container {
+        padding: 10px;
+        max-width: 100%;
+    }
+    
+    .user-info-section {
+        padding: 5px;
+    }
+    
+    .user-name-field,
+    .date-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .field-label {
+        font-size: 24px;
+        line-height: 32px;
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .field-value {
+        font-size: 18px;
+        height: 45px;
+        max-width: 100%;
+    }
+    
+    .section-title {
+        font-size: 24px;
+        line-height: 32px;
+    }
+    
+    .purity-field,
+    .reaction-volume-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .field-input {
+        width: 100%;
+        max-width: 200px;
+        font-size: 18px;
+    }
+    
+    .materials-header,
+    .reaction-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .image-placeholder,
+    .reaction-image {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .material-titles,
+    .material-data {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .material-title,
+    .material-name {
+        width: 100%;
+        font-size: 18px;
+        line-height: 24px;
+    }
+    
+    .property-column,
+    .property-value {
+        flex: 1;
+        min-width: 80px;
+    }
+    
+    .reaction-title {
+        font-size: 28px;
+        line-height: 36px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Малые мобильные (до 576px) */
+@media (max-width: 576px) {
+    .synthesis-page {
+        padding-top: 60px;
+    }
+    
+    .field-label {
+        font-size: 20px;
+        line-height: 28px;
+    }
+    
+    .field-value {
+        font-size: 16px;
+        height: 40px;
+        padding: 0 8px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+    
+    .material-title,
+    .material-name {
+        font-size: 16px;
+        line-height: 20px;
+    }
+    
+    .property-column span,
+    .property-value span {
+        font-size: 14px;
+    }
+    
+    .reaction-title {
+        font-size: 24px;
+        line-height: 32px;
+    }
+    
+    .image-placeholder,
+    .reaction-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .field-input {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    
+    .volume-display {
+        font-size: 18px;
+        line-height: 24px;
+    }
+}
+
+/* Очень маленькие экраны (до 400px) */
+@media (max-width: 400px) {
+    .synthesis-container {
+        padding: 5px;
+    }
+    
+    .material-titles,
+    .material-data {
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .property-column,
+    .property-value {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 5px;
+    }
+    
+    .reaction-content {
+        gap: 5px;
+    }
+    
+    .action-btn {
+        min-width: auto;
+        width: 100%;
+    }
+}
+
+/* Landscape ориентация */
+@media (max-height: 500px) and (orientation: landscape) {
+    .synthesis-page {
+        padding-top: 60px;
+    }
+    
+    .synthesis-container {
+        padding: 10px;
+    }
+    
+    .user-info-section {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .user-name-field,
+    .date-field {
+        flex: 1;
+        min-width: 200px;
+    }
+}

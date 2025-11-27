@@ -158,7 +158,6 @@
 }
 /* Контейнер кнопок */
 .frame-9 {
-  /* text-decoration: none; */
   display: flex;
   width: 100%;
   flex-direction: row;
@@ -177,21 +176,22 @@
   padding: 12px 20px;
   gap: 8px;
   min-width: 140px;
-  width: 100%;
+  /* УБИРАЕМ width: 100% */
   height: 60px;
   cursor: pointer;
-  /* border-radius: 6px; */
+  border-radius: 6px;
   transition: all 0.3s ease;
   font-family: 'Inter';
   font-size: 16px;
   font-weight: 500;
+  /* Добавляем flex-shrink чтобы кнопки не сжимались */
+  flex-shrink: 0;
 }
 
 .frame-17 {
   border: 2px solid #00A88F;
   background: transparent;
   color: #00A88F;
-  width: 100%;
 }
 
 .frame-17:hover {
