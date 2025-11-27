@@ -5,7 +5,7 @@ import { REACTIONS_MOCK } from '../modules/mock';
 import { getReaction } from '../modules/reactionsApi';
 import { BreadCrumbs } from '../components/BreadCrumbs';
 import defaultImage from "../assets/DefaultImage.jpg"
-import defimage from "../assets/DefaultImage5.jpg"
+import defimage from "../assets/DefaultImage5.png"
 import './ReactionDetailPage.css';
 
 export const ReactionDetailPage: FC = () => {
