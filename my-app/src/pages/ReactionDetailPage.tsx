@@ -7,6 +7,7 @@ import { BreadCrumbs } from '../components/BreadCrumbs';
 import defaultImage from "../assets/DefaultImage.jpg"
 import defimage from "../assets/DefaultImage5.png"
 import './ReactionDetailPage.css';
+import { transformImageUrl } from '../target_config';
 
 export const ReactionDetailPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -87,15 +88,14 @@ export const ReactionDetailPage: FC = () => {
             <p className="text-step-title"><span className="text-step-title">{reaction.Title}</span></p>
             <div className="frame-666">
               <div className="frame-png">
-                <img src={reaction.Src || defaultImage} className="image" alt="img" />
+                <img src={transformImageUrl(reaction.Src) || defaultImage} className="image" alt="img" />
               </div>
               <div className="frame-details">
                 <div className="frame-text-details">
                   <p className="text-step-details"><span className="text-step-details">{reaction.Details}</span></p>
                 </div>
-                {reaction.SrcUr && (
-                  <img src={reaction.SrcUr || defimage} className="formula" alt="formula" />
-                )}
+                <img src={transformImageUrl(reaction.SrcUr) || defimage} className="formula" alt="formula" />
+                
               </div>
             </div>
           </div>
