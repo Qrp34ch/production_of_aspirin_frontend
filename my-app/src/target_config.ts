@@ -13,9 +13,9 @@
 //   : '/RIP_frontend';
 
 // https://24206b2a8fee94.lhr.life
-export const API_BASE_URL = 'https://24206b2a8fee94.lhr.life/API'
+export const API_BASE_URL = 'https://6af422b245e103.lhr.life/API'
 
-export const IMAGE_BASE_URL = 'https://24206b2a8fee94.lhr.life/minio'
+export const IMAGE_BASE_URL = 'https://6af422b245e103.lhr.life/minio'
 export const transformImageUrl = (originalUrl: string) => {
   return originalUrl.replace('http://localhost:9000', IMAGE_BASE_URL);
 };
