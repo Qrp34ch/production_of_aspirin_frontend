@@ -49,7 +49,7 @@ const ProfilePage: FC = () => {
 
     const updateData: any = {
       login: formData.login,
-      name: formData.fio
+      fio: formData.fio
     };
 
     if (formData.password) {

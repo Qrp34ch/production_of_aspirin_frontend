@@ -1,5 +1,5 @@
-import { type FC, useEffect } from 'react';
-import { Container, Table, Button, Badge, Spinner, Alert } from 'react-bootstrap';
+import { type FC, useEffect, useState } from 'react';
+import { Container, Table, Button, Badge, Spinner, Alert, Form, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { type AppDispatch, type RootState } from '../store/store';
@@ -14,18 +14,48 @@ const SynthesesPage: FC = () => {
   const navigate = useNavigate();
   const { syntheses, loading, error } = useSelector((state: RootState) => state.synthesis);
 
+  // Состояния для фильтров
+  const [filters, setFilters] = useState({
+    status: '',
+    start_date: '',
+    end_date: ''
+  });
+
   useEffect(() => {
-    dispatch(getSyntheses({}));
+    dispatch(getSyntheses(filters));
   }, [dispatch]);
 
   const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'черновик': return 'secondary';
       case 'сформирован': return 'primary';
-      case 'завершён': return 'success'; // Обратите внимание на букву 'ё'
-      case 'отклонён': return 'danger';  // Обратите внимание на букву 'ё'
+      case 'завершён': return 'success';
+      case 'отклонён': return 'danger';
       default: return 'secondary';
     }
+  };
+
+  // Обработчики изменения фильтров
+  const handleFilterChange = (field: string, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Применить фильтры
+  const handleApplyFilters = () => {
+    dispatch(getSyntheses(filters));
+  };
+
+  // Сбросить фильтры
+  const handleResetFilters = () => {
+    const resetFilters = {
+      status: '',
+      start_date: '',
+      end_date: ''
+    };
+    setFilters(resetFilters);
+    dispatch(getSyntheses(resetFilters));
   };
 
   // Преобразуем syntheses в массив, если это необходимо
@@ -37,12 +67,94 @@ const SynthesesPage: FC = () => {
     return dateString;
   };
 
+  // Проверяем, применены ли какие-либо фильтры
+  const hasActiveFilters = filters.status || filters.start_date || filters.end_date;
+
   return (
     <div className="syntheses-page">
       <Navigation />
       <Container className="mt-4">
         <h2>Мои заявки на синтез</h2>
         <BreadCrumbs />
+        
+        {/* Карточка с фильтрами */}
+        <Card className="mb-4">
+          <Card.Header>
+            <h5 className="mb-0">Фильтры</h5>
+          </Card.Header>
+          <Card.Body>
+            <Row className="g-3">
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label>Статус</Form.Label>
+                  <Form.Select 
+                    value={filters.status}
+                    onChange={(e) => handleFilterChange('status', e.target.value)}
+                  >
+                    <option value="">Все статусы</option>
+                    <option value="черновик">Черновик</option>
+                    <option value="сформирован">Сформирован</option>
+                    <option value="завершён">Завершён</option>
+                    <option value="отклонён">Отклонён</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label>Дата с</Form.Label>
+                  <Form.Control 
+                    type="date"
+                    value={filters.start_date}
+                    onChange={(e) => handleFilterChange('start_date', e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+              
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label>Дата по</Form.Label>
+                  <Form.Control 
+                    type="date"
+                    value={filters.end_date}
+                    onChange={(e) => handleFilterChange('end_date', e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+              
+              <Col md={3} className="d-flex align-items-end">
+                <div className="d-flex gap-2 w-100">
+                  <Button 
+                    variant="primary" 
+                    onClick={handleApplyFilters}
+                    className="flex-fill"
+                  >
+                    Применить
+                  </Button>
+                  <Button 
+                    variant="outline-secondary" 
+                    onClick={handleResetFilters}
+                    disabled={!hasActiveFilters}
+                  >
+                    Сбросить
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+            
+            {/* Индикатор активных фильтров */}
+            {hasActiveFilters && (
+              <div className="mt-3">
+                <small className="text-muted">
+                  Активные фильтры: 
+                  {filters.status && ` Статус: ${filters.status}`}
+                  {filters.start_date && ` Дата с: ${filters.start_date}`}
+                  {filters.end_date && ` Дата по: ${filters.end_date}`}
+                </small>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
         
         {error && (
           <Alert variant="danger" className="mb-3">
@@ -60,8 +172,13 @@ const SynthesesPage: FC = () => {
         ) : (
           <>
             {synthesesArray.length > 0 && (
-              <div className="mb-3">
-                <Badge bg="info">Всего заявок: {synthesesArray.length}</Badge>
+              <div className="mb-3 d-flex justify-content-between align-items-center">
+                <Badge bg="info">Найдено заявок: {synthesesArray.length}</Badge>
+                {hasActiveFilters && (
+                  <Badge bg="warning" text="dark">
+                    Применены фильтры
+                  </Badge>
+                )}
               </div>
             )}
             
@@ -110,14 +227,28 @@ const SynthesesPage: FC = () => {
           <div className="text-center mt-4">
             <Alert variant="info">
               <h5>Заявки не найдены</h5>
-              <p>У вас пока нет заявок на синтез или произошла ошибка при загрузке.</p>
+              <p>
+                {hasActiveFilters 
+                  ? 'По выбранным фильтрам заявок не найдено. Попробуйте изменить условия поиска.' 
+                  : 'У вас пока нет заявок на синтез или произошла ошибка при загрузке.'
+                }
+              </p>
               <Button onClick={() => navigate(ROUTES.REACTION)}>
                 Перейти к реакциям
               </Button>
+              {hasActiveFilters && (
+                <Button 
+                  variant="outline-primary" 
+                  className="ms-2"
+                  onClick={handleResetFilters}
+                >
+                  Сбросить фильтры
+                </Button>
+              )}
               <Button 
                 variant="outline-primary" 
                 className="ms-2"
-                onClick={() => dispatch(getSyntheses({}))}
+                onClick={() => dispatch(getSyntheses(filters))}
               >
                 Обновить
               </Button>

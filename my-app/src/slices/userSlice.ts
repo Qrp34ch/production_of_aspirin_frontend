@@ -105,7 +105,7 @@ export const getProfile = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   'user/updateProfile',
-  async (userData: { login?: string; name?: string; password?: string }, { rejectWithValue }) => {
+  async (userData: { login?: string; fio?: string; password?: string }, { rejectWithValue }) => {
     try {
       const response = await api.api.usersProfileUpdate(userData);
       return response.data;
