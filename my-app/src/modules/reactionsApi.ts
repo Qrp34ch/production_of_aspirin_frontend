@@ -1,12 +1,15 @@
 import { type Reaction } from '../modules/type';
 import { getApiBaseUrl } from '../config/api';
+import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
 
 // Проверка: запущено ли приложение в Tauri?
-const isTauri = typeof window !== 'undefined' && (window as any).TAURI !== undefined;
-
-const API_BASE = getApiBaseUrl();
+// const isTauri = typeof window !== 'undefined' && (window as any).__TAURI__ !== undefined;
+// const isTauri = true;
+// const API_BASE = getApiBaseUrl();
 
 export const getReactions = async (query?: string): Promise<Reaction[]> => {
+  const isTauri = true;
+  const API_BASE = getApiBaseUrl();
   try {
     const url = query 
       ? `${API_BASE}/reaction?query=${encodeURIComponent(query)}` 
@@ -18,7 +21,7 @@ export const getReactions = async (query?: string): Promise<Reaction[]> => {
 
     if (isTauri) {
       // Используем Tauri HTTP plugin
-      const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http');
+      // const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http');
       response = await tauriFetch(url, {
         method: 'GET',
         headers: {
@@ -53,12 +56,14 @@ export const getReactions = async (query?: string): Promise<Reaction[]> => {
 };
 
 export const getReaction = async (id: number): Promise<Reaction> => {
+  const isTauri = true;
+  const API_BASE = getApiBaseUrl();
   try {
     const url = `${API_BASE}/reaction/${id}`;
     let response: Response;
 
     if (isTauri) {
-      const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http');
+      // const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http');
       response = await tauriFetch(url, {
         method: 'GET',
         headers: {

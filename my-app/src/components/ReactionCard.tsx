@@ -3,7 +3,6 @@ import { Card, Button } from 'react-bootstrap';
 import { type Reaction } from '../modules/type';
 import './ReactionCard.css';
 import defimage from "../assets/DefaultImage.jpg"
-import { transformImageUrl } from '../target_config';
 
 interface Props {
   reaction: Reaction;
@@ -16,7 +15,7 @@ export const ReactionCard: FC<Props> = ({ reaction, onCardClick, onAddToSynthesi
     <Card className="h-100">
       <Card.Img 
         variant="top" 
-        src={transformImageUrl(reaction.Src) || defimage} 
+        src={reaction.Src || defimage} 
         style={{ height: '200px', objectFit: 'cover', cursor: 'pointer' }}
         onClick={onCardClick}
       />

@@ -1,8 +1,9 @@
-import { useEffect, type FC } from 'react';
+// import { useEffect, type FC } from 'react';
+import { type FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 // import { BreadCrumbs } from './components/BreadCrumbs';
-import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+// import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 import { HomePage } from './pages/HomePage';
 import { ReactionsPage } from './pages/ReactionsPage';
 import { ReactionDetailPage } from './pages/ReactionDetailPage';
@@ -11,13 +12,13 @@ import { ROUTES } from '../Routes';
 import './App.css';
 
 const App: FC = () => {
-  useEffect(() => {
-    if (window.__TAURI__) {
-      console.log('Running in Tauri environment');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.__TAURI__) {
+  //     console.log('Running in Tauri environment');
+  //   }
+  // }, []);
   return (
-    <BrowserRouter basename="/RIP_frontend">
+    <BrowserRouter basename="/">
       <div className="App">
         <Navigation />
         <Routes>
@@ -27,7 +28,7 @@ const App: FC = () => {
         </Routes>
         
         {/* PWA Install Prompt */}
-        {!window.__TAURI__ && <PWAInstallPrompt />}
+        {/* {!window.__TAURI__ && <PWAInstallPrompt />} */}
       </div>
     </BrowserRouter>
   );

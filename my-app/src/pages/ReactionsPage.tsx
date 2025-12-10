@@ -10,7 +10,6 @@ import search from "../assets/search.png"
 import synthesispng from "../assets/korzina.png"
 import defimage from "../assets/DefaultImage.jpg"
 import { BreadCrumbs } from '../components/BreadCrumbs';
-import { transformImageUrl } from '../target_config';
 
 export const ReactionsPage: FC = () => {
   const dispatch = useAppDispatch();
@@ -132,7 +131,7 @@ export const ReactionsPage: FC = () => {
                 <div key={reaction.ID} className="step">
                   <p className="step-name">{reaction.Title}</p>
                   <img 
-                    src={transformImageUrl(reaction.Src) || defimage} 
+                    src={reaction.Src || defimage} 
                     className="image" 
                     alt={reaction.Title} 
                   />
