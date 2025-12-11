@@ -37,7 +37,10 @@
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  max-height: 450px;
 }
 
 .synthesis-card:hover {
@@ -46,7 +49,21 @@
 }
 
 .synthesis-card .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
+  overflow: hidden;
+}
+
+/* Заголовок карточки */
+.synthesis-header {
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+
+.synthesis-header .d-flex {
+  gap: 10px;
 }
 
 .synthesis-card .card-title {
@@ -66,6 +83,16 @@
   font-size: 14px;
   line-height: 1.4;
   color: #6c757d;
+}
+
+/* Обертка для статуса */
+.synthesis-status-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 120px;
+  text-align: right;
+  gap: 8px;
 }
 
 /* Стандартные стили для всех бейджей статусов */
@@ -127,7 +154,6 @@
   background: #ffc107 !important;
   color: #000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-top: 4px;
   white-space: nowrap;
   display: inline-block;
 }
@@ -136,91 +162,199 @@
   min-height: 28px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+}
+
+/* Контейнер деталей с возможностью скролла */
+.synthesis-details-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 200px;
+  margin-bottom: 15px;
+  padding-right: 5px;
+}
+
+/* Стилизация скролла */
+.synthesis-details-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.synthesis-details-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.synthesis-details-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.synthesis-details-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /* Детали заявки */
 .synthesis-details {
-  margin: 15px 0;
+  margin: 0;
 }
 
 .detail-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 8px;
-  padding: 4px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f5f5f5;
+  min-height: 24px;
 }
 
 .detail-row:last-child {
   border-bottom: none;
   margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .detail-label {
+  flex: 0 0 45%;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
   color: #666;
 }
 
 .detail-value {
+  flex: 0 0 55%;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.2;
   color: #000000;
   text-align: right;
-  max-width: 60%;
   word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 36px;
 }
 
-/* Кнопки действий */
-.synthesis-actions {
+/* Футер карточки */
+.synthesis-card-footer {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.synthesis-actions-container {
   display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
-.synthesis-actions .btn {
+/* Верхняя строка с кнопками */
+.synthesis-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+/* Стили для модераторского режима */
+.moderator-mode .synthesis-buttons-row {
+  gap: 4px;
+}
+
+.moderator-mode .synthesis-buttons-row .btn {
+  max-width: calc(33.333% - 3px);
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+}
+
+/* Нижняя строка с датой */
+.synthesis-date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 20px;
+}
+
+.synthesis-date {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Кнопки действий */
+.synthesis-buttons-row .btn {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px !important;
   line-height: 1.2;
-  padding: 8px 16px;
+  padding: 5px 10px !important;
   border-radius: 6px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-  min-width: 100px;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  max-width: calc(50% - 3px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-height: 32px;
 }
 
-.synthesis-actions .btn-outline-primary {
+/* Маленькие кнопки */
+.synthesis-buttons-row .btn-sm {
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+}
+
+/* Стили для отдельных типов кнопок */
+.btn-outline-primary {
   border-color: #00A88F;
   color: #00A88F;
   background: transparent;
 }
 
-.synthesis-actions .btn-outline-primary:hover {
+.btn-outline-primary:hover {
   background: #00A88F;
   border-color: #00A88F;
   color: white;
   transform: translateY(-1px);
 }
 
-.synthesis-actions .btn-outline-success {
+.btn-outline-success {
   border-color: #28a745;
   color: #28a745;
   background: transparent;
 }
 
-.synthesis-actions .btn-outline-success:hover {
+.btn-outline-success:hover {
   background: #28a745;
   border-color: #28a745;
   color: white;
   transform: translateY(-1px);
+}
+
+.btn-outline-warning {
+  border-color: #ffc107;
+  color: #000;
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.btn-outline-warning:hover {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #000;
 }
 
 /* Стили для кнопок в фильтрах */
@@ -269,55 +403,16 @@
   font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.2;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 168, 143, 0.2);
   border: none;
-  min-width: 160px;
+  min-width: auto;
   text-align: center;
-}
-
-.syntheses-page .mb-3 .badge.bg-success {
-  background: #28a745 !important;
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 1.2;
-  padding: 5px 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
-  border: none;
-  margin-left: 12px;
-  text-align: center;
-}
-
-/* Стили для спиннера загрузки реакций */
-.syntheses-page .mb-3 .d-flex.align-items-center {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  margin-left: 12px;
-}
-
-.syntheses-page .mb-3 .d-flex.align-items-center .spinner-border {
-  width: 1rem;
-  height: 1rem;
-  border-width: 0.15em;
-  color: #00A88F;
   margin-right: 8px;
-}
-
-.syntheses-page .mb-3 .d-flex.align-items-center .text-muted {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  color: #6c757d;
-  white-space: nowrap;
+  margin-bottom: 8px;
 }
 
 /* Стили для алертов */
@@ -343,6 +438,22 @@
   background: #d1ecf1;
   color: #0c5460;
   border-left: 4px solid #00A88F;
+}
+
+.moderator-alert {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  border-left: 4px solid #004E42;
+  margin-bottom: 1.5rem;
+}
+
+.moderator-alert .d-flex {
+  gap: 10px;
+}
+
+.moderator-alert span {
+  font-weight: 500;
+  color: #004E42;
 }
 
 .syntheses-page .alert-info h5 {
@@ -372,6 +483,7 @@
   border-width: 0.3em;
   color: #00A88F;
   margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .syntheses-page .text-center p {
@@ -398,154 +510,6 @@
 
 .synthesis-card {
   animation: fadeIn 0.3s ease-out;
-}
-
-/* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
-@media (max-width: 767px) {
-  .syntheses-page .container {
-    padding: 0 15px;
-  }
-  
-  .syntheses-page h2 {
-    font-size: 24px;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-  }
-  
-  .syntheses-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .synthesis-card .card-body {
-    padding: 15px;
-  }
-  
-  .synthesis-card .card-title {
-    font-size: 16px;
-  }
-  
-  .synthesis-card .card-subtitle {
-    font-size: 12px;
-  }
-  
-  .synthesis-reactions-badge {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-  
-  .detail-label,
-  .detail-value {
-    font-size: 12px;
-  }
-  
-  .synthesis-actions .btn {
-    font-size: 12px;
-    padding: 6px 12px;
-    min-width: 80px;
-  }
-  
-  .synthesis-actions {
-    gap: 5px;
-  }
-  
-  .syntheses-page .btn {
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-  
-  .synthesis-status {
-    font-size: 10px;
-    padding: 4px 8px;
-    min-width: 90px;
-    height: 20px;
-  }
-  
-  .syntheses-page .mb-3 .badge.bg-info,
-  .syntheses-page .mb-3 .badge.bg-success {
-    font-size: 12px;
-    padding: 8px 12px;
-    min-width: auto;
-    margin-bottom: 8px;
-  }
-  
-  .syntheses-page .mb-3 .d-flex.align-items-center {
-    padding: 6px 10px;
-    margin-left: 0;
-  }
-  
-  .syntheses-page .mb-3 .d-flex.align-items-center .text-muted {
-    font-size: 12px;
-  }
-  
-  .syntheses-page .alert {
-    font-size: 14px;
-    padding: 12px 15px;
-  }
-  
-  .syntheses-page .alert-info h5 {
-    font-size: 16px;
-  }
-  
-  .syntheses-page .alert-info p {
-    font-size: 14px;
-  }
-}
-
-/* ПЛАНШЕТНАЯ АДАПТИВНОСТЬ */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .syntheses-page .container {
-    padding: 0 20px;
-  }
-  
-  .syntheses-page h2 {
-    font-size: 28px;
-  }
-  
-  .syntheses-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  
-  .synthesis-card .card-title {
-    font-size: 17px;
-  }
-  
-  .detail-label,
-  .detail-value {
-    font-size: 13px;
-  }
-  
-  .synthesis-status {
-    min-width: 100px;
-  }
-  
-  .syntheses-page .mb-3 .badge.bg-info,
-  .syntheses-page .mb-3 .badge.bg-success {
-    font-size: 14px;
-    padding: 10px 16px;
-  }
-}
-
-/* БОЛЬШИЕ ЭКРАНЫ */
-@media (min-width: 1025px) {
-  .syntheses-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-  }
-  
-  .synthesis-card .card-body {
-    padding: 25px;
-  }
-  
-  .syntheses-page .mb-3 .d-flex {
-    flex-wrap: nowrap;
-  }
-}
-
-/* Стили для пустого состояния */
-.syntheses-page .text-center {
-  padding: 2rem 0;
 }
 
 /* Стили для формы фильтров */
@@ -595,11 +559,405 @@
   outline: none;
 }
 
-/* Тень для спиннеров */
-.spinner-border {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
+@media (max-width: 767px) {
+  .syntheses-page .container {
+    padding: 0 15px;
+  }
+  
+  .syntheses-page h2 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .syntheses-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .synthesis-card {
+    min-height: 350px;
+    max-height: 400px;
+  }
+  
+  .synthesis-card .card-body {
+    padding: 15px;
+  }
+  
+  .synthesis-card .card-title {
+    font-size: 16px;
+  }
+  
+  .synthesis-card .card-subtitle {
+    font-size: 12px;
+  }
+  
+  .synthesis-status-wrapper {
+    min-width: 100px;
+  }
+  
+  .synthesis-status {
+    font-size: 10px;
+    padding: 4px 8px;
+    min-width: 90px;
+    height: 20px;
+  }
+  
+  .synthesis-reactions-badge {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .synthesis-details-container {
+    max-height: 180px;
+  }
+  
+  .detail-label,
+  .detail-value {
+    font-size: 12px;
+  }
+  
+  .synthesis-buttons-row .btn {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+    max-width: calc(50% - 4px);
+    min-height: 30px;
+  }
+  
+  .moderator-mode .synthesis-buttons-row .btn {
+    max-width: calc(33.333% - 4px);
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+  }
+  
+  .synthesis-date {
+    font-size: 11px;
+  }
+  
+  .syntheses-page .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  
+  .syntheses-page .mb-3 .badge.bg-info {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .syntheses-page .alert {
+    font-size: 14px;
+    padding: 12px 15px;
+  }
+  
+  .syntheses-page .alert-info h5 {
+    font-size: 16px;
+  }
+  
+  .syntheses-page .alert-info p {
+    font-size: 14px;
+  }
 }
 
-.me-3 {
+/* ПЛАНШЕТНАЯ АДАПТИВНОСТЬ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .syntheses-page .container {
+    padding: 0 20px;
+  }
+  
+  .syntheses-page h2 {
+    font-size: 28px;
+  }
+  
+  .syntheses-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .synthesis-card {
+    min-height: 370px;
+    max-height: 420px;
+  }
+  
+  .synthesis-card .card-title {
+    font-size: 17px;
+  }
+  
+  .detail-label,
+  .detail-value {
+    font-size: 13px;
+  }
+  
+  .synthesis-status {
+    min-width: 100px;
+  }
+  
+  .synthesis-buttons-row .btn {
+    font-size: 12px !important;
+    padding: 5px 10px !important;
+  }
+  
+  .syntheses-page .mb-3 .badge.bg-info {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+}
+
+/* БОЛЬШИЕ ЭКРАНЫ */
+@media (min-width: 1025px) {
+  .syntheses-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  .synthesis-card .card-body {
+    padding: 25px;
+  }
+  
+  .syntheses-page .mb-3 .d-flex {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Стили для пустого состояния */
+.syntheses-page .text-center {
+  padding: 2rem 0;
+}
+
+/* Улучшение flex-контейнеров */
+.d-flex.justify-content-between.align-items-center {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Переопределение bootstrap margin */
+.me-2 {
+  margin-right: 0.5rem !important;
+}
+
+.ms-2 {
+  margin-left: 0.5rem !important;
+}
+
+.me-1 {
+  margin-right: 0.25rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Текст с информацией о автообновлении */
+.text-muted {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* Стили для модального окна */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 20px;
+}
+
+.modal-title {
+  font-family: 'Inter';
+  font-weight: 600;
+  font-size: 20px;
+  color: #000;
+}
+
+.modal-body {
+  padding: 20px;
+  font-family: 'Inter';
+  font-size: 16px;
+  color: #333;
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 15px 20px;
+}
+
+/* Стили для фильтра по создателю */
+.syntheses-page .form-control::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+/* Стили для бейджей фильтра */
+.mt-3 .badge {
+  font-family: 'Inter';
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* Улучшение отображения Flexbox контейнеров */
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* Добавляем отступы для лучшего разделения */
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+/* Стили для BreadCrumbs */
+.syntheses-page .breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* Улучшение отображения Navigation */
+.syntheses-page .navigation {
+  margin-bottom: 0;
+}
+
+/* Адаптивность для очень маленьких экранов */
+@media (max-width: 375px) {
+  .synthesis-buttons-row .btn {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+    min-height: 28px;
+  }
+  
+  .synthesis-card .card-title {
+    font-size: 15px;
+  }
+  
+  .synthesis-status {
+    font-size: 9px;
+    min-width: 80px;
+    height: 18px;
+  }
+  
+  .detail-label,
+  .detail-value {
+    font-size: 11px;
+  }
+}
+
+/* Обновите эти стили в файле SynthesesPage.css */
+
+/* Кнопка "Просмотреть" - зеленый #00A88F */
+.btn-outline-primary {
+  border-color: #00A88F;
+  color: #00A88F;
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: #00A88F;
+  border-color: #00A88F;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Кнопка "Изменить статус" - темно-зеленый #004E42 */
+.btn-outline-warning {
+  border-color: #004E42;
+  color: #004E42;
+  background: transparent;
+}
+
+.btn-outline-warning:hover {
   background: #004E42;
+  border-color: #004E42;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Кнопка "Продолжить" - оставляем стандартный зеленый Bootstrap */
+.btn-outline-success {
+  border-color: #28a745;
+  color: #28a745;
+  background: transparent;
+}
+
+.btn-outline-success:hover {
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Основные кнопки (Применить фильтры и др.) */
+.syntheses-page .btn-primary {
+  background: #004E42;
+  border-color: #004E42;
+  color: white;
+}
+
+.syntheses-page .btn-primary:hover {
+  background: #00332a;
+  border-color: #00332a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 78, 66, 0.2);
+}
+
+/* Кнопка в модальном окне */
+.modal-footer .btn-primary {
+  background: #004E42;
+  border-color: #004E42;
+  color: white;
+}
+
+.modal-footer .btn-primary:hover {
+  background: #00332a;
+  border-color: #00332a;
+}
+
+/* Добавлю более специфичные стили для кнопок в карточках */
+.synthesis-buttons-row .btn-outline-primary {
+  border-color: #00A88F !important;
+  color: #00A88F !important;
+  background: transparent !important;
+}
+
+.synthesis-buttons-row .btn-outline-primary:hover {
+  background: #00A88F !important;
+  border-color: #00A88F !important;
+  color: white !important;
+}
+
+.synthesis-buttons-row .btn-outline-warning {
+  border-color: #004E42 !important;
+  color: #004E42 !important;
+  background: transparent !important;
+}
+
+.synthesis-buttons-row .btn-outline-warning:hover {
+  background: #004E42 !important;
+  border-color: #004E42 !important;
+  color: white !important;
 }

@@ -451,6 +451,17 @@ export const saveVolumesOnly = createAsyncThunk(
     }
   }
 );
+export const moderateSynthesis = createAsyncThunk(
+  'synthesis/moderate',
+  async ({ synthesisId, newStatus }: { synthesisId: number; newStatus: boolean }, { rejectWithValue }) => {
+    try {
+      const response = await api.api.synthesisModerateUpdate(synthesisId, { new_status: newStatus });
+      return { synthesisId, newStatus, response: response.data };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.description || 'Ошибка изменения статуса');
+    }
+  }
+);
 // Action для сохранения конкретного объема реакции
 export const saveReactionVolume = createAsyncThunk(
   'synthesis/saveReactionVolume',
@@ -572,6 +583,13 @@ const synthesisSlice = createSlice({
           if (reaction) {
             reaction.volume_sm = volume_sm;
           }
+        }
+      })
+      .addCase(moderateSynthesis.fulfilled, (state, action) => {
+        const { synthesisId, newStatus } = action.payload;
+        const synthesis = state.syntheses.find(s => s.id === synthesisId);
+        if (synthesis) {
+          synthesis.status = newStatus ? 'завершён' : 'отклонён';
         }
       })
       

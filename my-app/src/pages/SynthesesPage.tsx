@@ -1,5 +1,5 @@
-import { type FC, useEffect, useState } from 'react';
-import { Container, Button, Badge, Spinner, Alert, Form, Row, Col, Card } from 'react-bootstrap';
+import { type FC, useEffect, useState, useRef } from 'react';
+import { Container, Button, Badge, Spinner, Alert, Form, Row, Col, Card, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { type AppDispatch, type RootState } from '../store/store';
@@ -7,13 +7,18 @@ import { getSyntheses, getSynthesis } from '../slices/synthesisSlice';
 import { Navigation } from '../components/Navigation';
 import { BreadCrumbs } from '../components/BreadCrumbs';
 import { ROUTES } from '../../Routes';
+import { api } from '../api';
 import './SynthesesPage.css';
 
 const SynthesesPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { syntheses, loading, error } = useSelector((state: RootState) => state.synthesis);
-
+  const { user } = useSelector((state: RootState) => state.user);
+  
+  // Проверяем, является ли пользователь модератором
+  const isModerator = user?.is_moderator || false;
+  
   const [inputValues, setInputValues] = useState({
     status: '',
     start_date: '',
@@ -26,16 +31,52 @@ const SynthesesPage: FC = () => {
     end_date: ''
   });
 
+  // Состояние для фильтрации по создателю (на фронтенде)
+  const [creatorFilter, setCreatorFilter] = useState('');
+  const [filteredSyntheses, setFilteredSyntheses] = useState<any[]>([]);
+  
   // Состояние для хранения количества реакций для каждого синтеза
   const [reactionsCounts, setReactionsCounts] = useState<{[key: number]: number}>({});
   // Состояние для отслеживания загрузки
   const [loadingReactions, setLoadingReactions] = useState<{[key: number]: boolean}>({});
   // Общее количество реакций во всех завершенных синтезах
   const [totalReactionsCount, setTotalReactionsCount] = useState(0);
+  
+  // Состояние для модального окна изменения статуса
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [selectedSynthesis, setSelectedSynthesis] = useState<any>(null);
+  const [newStatus, setNewStatus] = useState<string>('');
+  const [statusLoading, setStatusLoading] = useState(false);
+  
+  // Ref для short polling
+  const pollingRef = useRef<number | null>(null);
 
-  useEffect(() => {
+  // Функция для загрузки заявок
+  const fetchSyntheses = () => {
     dispatch(getSyntheses(activeFilters));
-  }, [dispatch, activeFilters]);
+  };
+
+  // Short polling для модератора
+  useEffect(() => {
+    if (isModerator) {
+      // Первый запрос
+      fetchSyntheses();
+      
+      // Настраиваем интервал для периодического обновления
+      const intervalId = setInterval(fetchSyntheses, 5000); // Обновляем каждые 5 секунд
+      pollingRef.current = intervalId;
+      
+      // Очистка при размонтировании
+      return () => {
+        if (pollingRef.current) {
+          clearInterval(pollingRef.current);
+        }
+      };
+    } else {
+      // Для обычных пользователей загружаем только при изменении фильтров
+      fetchSyntheses();
+    }
+  }, [dispatch, activeFilters, isModerator]);
 
   // Инициализация дат при монтировании
   useEffect(() => {
@@ -51,34 +92,26 @@ const SynthesesPage: FC = () => {
 
   // Функция для загрузки количества реакций для конкретного синтеза
   const loadReactionsCount = async (synthesisId: number) => {
-    // Устанавливаем флаг загрузки
     setLoadingReactions(prev => ({ ...prev, [synthesisId]: true }));
     
     try {
-      // Используем dispatch getSynthesis из слайса (уже содержит авторизацию)
       const resultAction = await dispatch(getSynthesis(synthesisId));
       
       if (getSynthesis.fulfilled.match(resultAction)) {
         const synthesisData = resultAction.payload;
         
         if (synthesisData?.reactions && Array.isArray(synthesisData.reactions)) {
-          // Суммируем все count в реакциях
           const totalCount = synthesisData.reactions.reduce((sum: number, reaction: any) => {
-            // reaction.count (с маленькой c) из SynthesisReaction
             return sum + (reaction.count || 0);
           }, 0);
           
-          console.log(`Synthesis ${synthesisId}: found ${totalCount} reactions`);
-          
-          // Обновляем количество реакций для этого синтеза
           setReactionsCounts(prev => ({
             ...prev,
             [synthesisId]: totalCount
           }));
           
-          return totalCount; // Возвращаем результат для подсчета общей суммы
+          return totalCount;
         } else {
-          console.log(`Synthesis ${synthesisId}: no reactions found in response`);
           setReactionsCounts(prev => ({
             ...prev,
             [synthesisId]: 0
@@ -86,7 +119,6 @@ const SynthesesPage: FC = () => {
           return 0;
         }
       } else {
-        console.log(`Synthesis ${synthesisId}: dispatch failed`);
         setReactionsCounts(prev => ({
           ...prev,
           [synthesisId]: 0
@@ -101,7 +133,6 @@ const SynthesesPage: FC = () => {
       }));
       return 0;
     } finally {
-      // Снимаем флаг загрузки
       setLoadingReactions(prev => ({ ...prev, [synthesisId]: false }));
     }
   };
@@ -113,42 +144,45 @@ const SynthesesPage: FC = () => {
       
       const completedSyntheses = syntheses.filter(s => s.status === 'завершён');
       
-      console.log('Found completed syntheses:', completedSyntheses.map(s => s.id));
-      
       let totalCount = 0;
       const counts: {[key: number]: number} = {};
       
-      // Загружаем все параллельно
       const promises = completedSyntheses.map(async (synthesis) => {
-        // Загружаем только если еще не загружено и не в процессе загрузки
         if (!reactionsCounts[synthesis.id] && !loadingReactions[synthesis.id]) {
-          console.log(`Loading reactions count for synthesis ${synthesis.id}`);
           const count = await loadReactionsCount(synthesis.id);
           counts[synthesis.id] = count;
           return count;
         } else if (reactionsCounts[synthesis.id]) {
-          // Уже загружено - используем существующее значение
           counts[synthesis.id] = reactionsCounts[synthesis.id];
           return reactionsCounts[synthesis.id];
         }
         return 0;
       });
       
-      // Ждем завершения всех загрузок
       const results = await Promise.all(promises);
-      
-      // Считаем общую сумму
       totalCount = results.reduce((sum, count) => sum + count, 0);
       
-      // Обновляем состояния
       setReactionsCounts(prev => ({ ...prev, ...counts }));
       setTotalReactionsCount(totalCount);
-      
-      console.log('Total reactions count:', totalCount);
     };
     
     loadAllReactionsCounts();
   }, [syntheses]);
+
+  // Фильтрация по создателю на фронтенде
+  useEffect(() => {
+    if (syntheses && Array.isArray(syntheses)) {
+      let filtered = [...syntheses];
+      
+      if (creatorFilter) {
+        filtered = filtered.filter(s => 
+          s.creator_login?.toLowerCase().includes(creatorFilter.toLowerCase())
+        );
+      }
+      
+      setFilteredSyntheses(filtered);
+    }
+  }, [syntheses, creatorFilter]);
 
   const getStatusVariant = (status: string) => {
     switch (status) {
@@ -187,10 +221,47 @@ const SynthesesPage: FC = () => {
       start_date: '',
       end_date: ''
     });
+    setCreatorFilter('');
   };
 
-  const synthesesArray = Array.isArray(syntheses) ? syntheses : [];
-  const hasActiveFilters = activeFilters.status || activeFilters.start_date || activeFilters.end_date;
+  // Функция для открытия модального окна изменения статуса
+  const handleOpenStatusModal = (synthesis: any) => {
+    setSelectedSynthesis(synthesis);
+    setNewStatus('');
+    setShowStatusModal(true);
+  };
+
+  // Функция для изменения статуса заявки
+  const handleChangeStatus = async () => {
+    if (!selectedSynthesis || !newStatus) return;
+    
+    setStatusLoading(true);
+    try {
+      const newStatusBoolean = newStatus === 'завершён'; // true для завершения, false для отклонения
+      
+      await api.api.synthesisModerateUpdate(selectedSynthesis.id, {
+        new_status: newStatusBoolean
+      });
+      
+      // Обновляем список заявок после изменения статуса
+      fetchSyntheses();
+      
+      setShowStatusModal(false);
+      setSelectedSynthesis(null);
+      setNewStatus('');
+      
+      // Показываем уведомление об успехе
+      alert(`Статус заявки #${selectedSynthesis.id} успешно изменен на "${newStatus}"`);
+    } catch (error: any) {
+      console.error('Ошибка при изменении статуса:', error);
+      alert('Ошибка при изменении статуса: ' + (error.response?.data?.description || error.message));
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  const synthesesArray = filteredSyntheses;
+  const hasActiveFilters = activeFilters.status || activeFilters.start_date || activeFilters.end_date || creatorFilter;
 
   // Проверяем, есть ли завершенные синтезы
   const hasCompletedSyntheses = synthesesArray.some(s => s.status === 'завершён');
@@ -203,8 +274,17 @@ const SynthesesPage: FC = () => {
     <div className="syntheses-page">
       <Navigation />
       <Container className="mt-4">
-        <h2>Мои заявки на синтез</h2>
+        <h2>{isModerator ? 'Все заявки на синтез (модератор)' : 'Мои заявки на синтез'}</h2>
         <BreadCrumbs />
+        
+        {isModerator && (
+          <Alert variant="info" className="mb-3 moderator-alert">
+            <div className="d-flex align-items-center">
+              
+              <span>Режим модератора</span>
+            </div>
+          </Alert>
+        )}
         
         {/* Карточка с фильтрами */}
         <Card className="mb-4">
@@ -251,20 +331,34 @@ const SynthesesPage: FC = () => {
                 </Form.Group>
               </Col>
               
-              <Col md={3} className="d-flex align-items-end">
+              {isModerator && (
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label>Создатель (поиск)</Form.Label>
+                    <Form.Control 
+                      type="text"
+                      placeholder="Введите логин создателя..."
+                      value={creatorFilter}
+                      onChange={(e) => setCreatorFilter(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              )}
+              
+              <Col md={isModerator ? 12 : 3} className="d-flex align-items-end">
                 <div className="d-flex gap-2 w-100">
                   <Button 
                     variant="primary" 
                     onClick={handleApplyFilters}
                     className="flex-fill"
                   >
-                    Применить
+                    Применить фильтры
                   </Button>
+                  
                   
                 </div>
               </Col>
             </Row>
-            
             
           </Card.Body>
         </Card>
@@ -286,18 +380,18 @@ const SynthesesPage: FC = () => {
           <>
             {synthesesArray.length > 0 && (
               <div className="mb-3 d-flex justify-content-between align-items-center">
-                <div className="d-flex align-items-center">
-                  <Badge bg="info" className="me-2">
-                    Найдено синтезов: {synthesesArray.length}
+                <div className="d-flex align-items-center flex-wrap">
+                  <Badge bg="info" className="me-2 mb-2">
+                    {isModerator ? 'Всего заявок:' : 'Мои заявки:'} {synthesesArray.length}
                   </Badge>
                   {hasCompletedSyntheses && (
                     <>
                       {allReactionsLoaded ? (
-                        <Badge bg="info" className="me-2">
+                        <Badge bg="info" className="me-2 mb-2">
                           Всего результатов реакций: {totalReactionsCount}
                         </Badge>
                       ) : (
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center mb-2">
                           <Spinner animation="border" size="sm" className="me-2" />
                           <small className="text-muted">Подсчет реакций...</small>
                         </div>
@@ -313,81 +407,105 @@ const SynthesesPage: FC = () => {
               {synthesesArray.map((synthesis) => (
                 <Card key={synthesis.id} className="synthesis-card">
                   <Card.Body>
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                      <div>
-                        <Card.Title className="mb-1">Заявка #{synthesis.id}</Card.Title>
-                        <Card.Subtitle className="text-muted">
-                          Создана: {synthesis.created_at || '-'}
-                        </Card.Subtitle>
+                    {/* Заголовок */}
+                    <div className="synthesis-header">
+                      <div className="d-flex justify-content-between align-items-start">
+                        <div>
+                          <Card.Title className="mb-1">Заявка #{synthesis.id}</Card.Title>
+                          <Card.Subtitle className="text-muted">
+                            Создана: {synthesis.created_at || '-'}
+                          </Card.Subtitle>
+                        </div>
+                        <div className="synthesis-status-wrapper">
+                          <Badge bg={getStatusVariant(synthesis.status)} className="synthesis-status">
+                            {synthesis.status}
+                          </Badge>
+                          {/* Показываем количество реакций только для завершенных синтезов */}
+                          {synthesis.status === 'завершён' && (
+                            <div className="reactions-count">
+                              {loadingReactions[synthesis.id] ? (
+                                <div className="d-flex align-items-center">
+                                  <Spinner animation="border" size="sm" className="me-1" />
+                                  <small className="text-muted">Загрузка...</small>
+                                </div>
+                              ) : reactionsCounts[synthesis.id] !== undefined ? (
+                                <Badge bg="warning" className="synthesis-reactions-badge">
+                                  Реакций: {reactionsCounts[synthesis.id]}
+                                </Badge>
+                              ) : (
+                                <small className="text-muted">Не загружено</small>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="d-flex flex-column align-items-end">
-                        <Badge bg={getStatusVariant(synthesis.status)} className="synthesis-status mb-2">
-                          {synthesis.status}
-                        </Badge>
-                        {/* Показываем количество реакций только для завершенных синтезов */}
-                        {synthesis.status === 'завершён' && (
-                          <div className="reactions-count">
-                            {loadingReactions[synthesis.id] ? (
-                              <div className="d-flex align-items-center">
-                                <Spinner animation="border" size="sm" className="me-2" />
-                                <small className="text-muted">Загрузка...</small>
-                              </div>
-                            ) : reactionsCounts[synthesis.id] !== undefined ? (
-                              <Badge bg="warning" className="synthesis-reactions-badge">
-                                Реакций: {reactionsCounts[synthesis.id]}
-                              </Badge>
-                            ) : (
-                              <small className="text-muted">Не загружено</small>
-                            )}
+                    </div>
+
+                    {/* Детали заявки */}
+                    <div className="synthesis-details-container">
+                      <div className="synthesis-details">
+                        <div className="detail-row">
+                          <span className="detail-label">Концентрация:</span>
+                          <span className="detail-value">{synthesis.purity || 0}%</span>
+                        </div>
+                        <div className="detail-row">
+                          <span className="detail-label">Создатель:</span>
+                          <span className="detail-value">{synthesis.creator_login || '-'}</span>
+                        </div>
+                        <div className="detail-row">
+                          <span className="detail-label">Модератор:</span>
+                          <span className="detail-value">{synthesis.moderator_login || '-'}</span>
+                        </div>
+                        {synthesis.finished_at && (
+                          <div className="detail-row">
+                            <span className="detail-label">Дата завершения:</span>
+                            <span className="detail-value">{synthesis.finished_at}</span>
                           </div>
                         )}
                       </div>
                     </div>
-                    
-                    <div className="synthesis-details">
-                      <div className="detail-row">
-                        <span className="detail-label">Концентрация:</span>
-                        <span className="detail-value">{synthesis.purity || 0}%</span>
-                      </div>
-                      <div className="detail-row">
-                        <span className="detail-label">Создатель:</span>
-                        <span className="detail-value">{synthesis.creator_login || '-'}</span>
-                      </div>
-                      <div className="detail-row">
-                        <span className="detail-label">Модератор:</span>
-                        <span className="detail-value">{synthesis.moderator_login || '-'}</span>
-                      </div>
-                      {synthesis.finished_at && (
-                        <div className="detail-row">
-                          <span className="detail-label">Дата завершения:</span>
-                          <span className="detail-value">{synthesis.finished_at}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="d-flex justify-content-between align-items-center mt-3">
-                      <div className="synthesis-actions">
-                        <Button 
-                          variant="outline-primary" 
-                          size="sm"
-                          onClick={() => navigate(`${ROUTES.SYNTHESIS.replace(':id', synthesis.id.toString())}`)}
-                          className="me-2"
-                        >
-                          Просмотреть
-                        </Button>
-                        {synthesis.status === 'черновик' && (
+
+                    {/* Футер с кнопками */}
+                    <div className="synthesis-card-footer">
+                      <div className="synthesis-actions-container">
+                        <div className={`synthesis-buttons-row ${isModerator ? 'moderator-mode' : ''}`}>
                           <Button 
-                            variant="outline-success" 
+                            variant="outline-primary" 
                             size="sm"
                             onClick={() => navigate(`${ROUTES.SYNTHESIS.replace(':id', synthesis.id.toString())}`)}
+                            className="btn-sm"
                           >
-                            Продолжить
+                            Просмотреть
                           </Button>
-                        )}
+                          {synthesis.status === 'черновик' && !isModerator && (
+                            <Button 
+                              variant="outline-success" 
+                              size="sm"
+                              onClick={() => navigate(`${ROUTES.SYNTHESIS.replace(':id', synthesis.id.toString())}`)}
+                              className="btn-sm"
+                            >
+                              Продолжить
+                            </Button>
+                          )}
+                          
+                          {/* Кнопки модератора */}
+                          {isModerator && synthesis.status === 'сформирован' && (
+                            <Button 
+                              variant="outline-warning" 
+                              size="sm"
+                              onClick={() => handleOpenStatusModal(synthesis)}
+                              className="btn-sm"
+                            >
+                              Изменить статус
+                            </Button>
+                          )}
+                        </div>
+                        <div className="synthesis-date-row">
+                          <small className="text-muted synthesis-date">
+                            Обновлена: {synthesis.updated_at || synthesis.created_at}
+                          </small>
+                        </div>
                       </div>
-                      <small className="text-muted">
-                        Обновлена: {synthesis.updated_at || synthesis.created_at}
-                      </small>
                     </div>
                   </Card.Body>
                 </Card>
@@ -403,7 +521,9 @@ const SynthesesPage: FC = () => {
               <p>
                 {hasActiveFilters 
                   ? 'По выбранным фильтрам заявок не найдено. Попробуйте изменить условия поиска.' 
-                  : 'У вас пока нет заявок на синтез или произошла ошибка при загрузке.'
+                  : isModerator
+                    ? 'На данный момент нет заявок на модерацию.'
+                    : 'У вас пока нет заявок на синтез или произошла ошибка при загрузке.'
                 }
               </p>
               <div className="mt-3">
@@ -422,7 +542,7 @@ const SynthesesPage: FC = () => {
                 <Button 
                   variant="outline-primary" 
                   className="ms-2"
-                  onClick={() => dispatch(getSyntheses(activeFilters))}
+                  onClick={fetchSyntheses}
                 >
                   Обновить
                 </Button>
@@ -431,6 +551,62 @@ const SynthesesPage: FC = () => {
           </div>
         )}
       </Container>
+
+      {/* Модальное окно для изменения статуса */}
+      <Modal show={showStatusModal} onHide={() => setShowStatusModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Изменение статуса заявки</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedSynthesis && (
+            <>
+              <p>
+                Заявка #{selectedSynthesis.id} от {selectedSynthesis.creator_login}
+              </p>
+              <p>
+                Текущий статус: <Badge bg={getStatusVariant(selectedSynthesis.status)}>
+                  {selectedSynthesis.status}
+                </Badge>
+              </p>
+              <Form.Group className="mb-3">
+                <Form.Label>Новый статус:</Form.Label>
+                <Form.Select 
+                  value={newStatus}
+                  onChange={(e) => setNewStatus(e.target.value)}
+                  disabled={statusLoading}
+                >
+                  <option value="">Выберите статус</option>
+                  <option value="завершён">Завершён</option>
+                  <option value="отклонён">Отклонён</option>
+                </Form.Select>
+              </Form.Group>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="secondary" 
+            onClick={() => setShowStatusModal(false)}
+            disabled={statusLoading}
+          >
+            Отмена
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={handleChangeStatus}
+            disabled={!newStatus || statusLoading}
+          >
+            {statusLoading ? (
+              <>
+                <Spinner animation="border" size="sm" className="me-2" />
+                Изменение...
+              </>
+            ) : (
+              'Изменить статус'
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
