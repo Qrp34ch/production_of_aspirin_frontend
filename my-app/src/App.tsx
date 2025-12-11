@@ -49,13 +49,24 @@ import SynthesesPage from './pages/SynthesesPage';
 import ProfilePage from './pages/ProfilePage';
 import { ROUTES } from '../Routes';
 import './App.css';
+import { resetFirstLoad } from './slices/userSlice';
+import { useDispatch } from 'react-redux';
+// import { checkAuth } from './slices/userSlice';
 
 const App: FC = () => {
+  localStorage.removeItem('authToken');
+  // useEffect(() => {
+  //   resetFirstLoad();
+  //   if (window.__TAURI__) {
+  //     console.log('Running in Tauri environment');
+  //   }
+  // }, []);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (window.__TAURI__) {
-      console.log('Running in Tauri environment');
-    }
-  }, []);
+    // Проверяем авторизацию при загрузке приложения
+    dispatch(resetFirstLoad());
+  }, [dispatch]);
 
   return (
     <BrowserRouter basename="/RIP_frontend">

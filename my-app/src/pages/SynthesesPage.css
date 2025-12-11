@@ -22,50 +22,54 @@
   text-align: center;
 }
 
-/* Стили для таблицы */
-.syntheses-page .table {
-  background: #FFFFFF;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0e0e0;
+/* Сетка карточек */
+.syntheses-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   margin-bottom: 2rem;
 }
 
-.syntheses-page .table thead th {
-  background: #004E42;
-  color: white;
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.2;
-  padding: 15px 12px;
-  border: none;
-  text-align: center;
-  vertical-align: middle;
+/* Карточка заявки */
+.synthesis-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
 }
 
-.syntheses-page .table tbody td {
+.synthesis-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.synthesis-card .card-body {
+  padding: 20px;
+}
+
+.synthesis-card .card-title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.2;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.synthesis-card .card-subtitle {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.4;
-  padding: 12px 10px;
-  text-align: center;
-  vertical-align: middle;
-  border-color: #e0e0e0;
-  color: #000000;
+  color: #6c757d;
 }
 
-.syntheses-page .table tbody tr:hover {
-  background-color: #f8f9fa;
-  transition: background-color 0.3s ease;
-}
-
-/* Стили для бейджей статусов */
-.syntheses-page .badge {
+/* Стандартные стили для всех бейджей статусов */
+.synthesis-status {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
@@ -75,10 +79,112 @@
   border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: inline-block;
+  text-align: center;
+  min-width: 110px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
 }
 
-/* Стили для кнопок */
-.syntheses-page .btn {
+/* Специфические стили для каждого статуса */
+.badge.bg-primary.synthesis-status { /* сформирован */
+  background: #007bff !important;
+  color: white !important;
+}
+
+.badge.bg-success.synthesis-status { /* завершён */
+  background: #28a745 !important;
+  color: white !important;
+}
+
+.badge.bg-danger.synthesis-status { /* отклонён */
+  background: #dc3545 !important;
+  color: white !important;
+}
+
+.badge.bg-warning.synthesis-status { /* черновик */
+  background: #ffc107 !important;
+  color: #000 !important;
+}
+
+.badge.bg-secondary.synthesis-status { /* другие статусы */
+  background: #6c757d !important;
+  color: white !important;
+}
+
+/* Бейдж количества реакций */
+.synthesis-reactions-badge {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.2;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: #ffc107 !important;
+  color: #000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.reactions-count {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+/* Детали заявки */
+.synthesis-details {
+  margin: 15px 0;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #666;
+}
+
+.detail-value {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #000000;
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
+}
+
+/* Кнопки действий */
+.synthesis-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.synthesis-actions .btn {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
@@ -88,19 +194,46 @@
   border-radius: 6px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  min-width: 100px;
 }
 
-.syntheses-page .btn-outline-primary {
+.synthesis-actions .btn-outline-primary {
   border-color: #00A88F;
   color: #00A88F;
   background: transparent;
 }
 
-.syntheses-page .btn-outline-primary:hover {
+.synthesis-actions .btn-outline-primary:hover {
   background: #00A88F;
   border-color: #00A88F;
   color: white;
   transform: translateY(-1px);
+}
+
+.synthesis-actions .btn-outline-success {
+  border-color: #28a745;
+  color: #28a745;
+  background: transparent;
+}
+
+.synthesis-actions .btn-outline-success:hover {
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Стили для кнопок в фильтрах */
+.syntheses-page .btn {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
 
 .syntheses-page .btn-primary {
@@ -113,18 +246,78 @@
   background: #00332a;
   border-color: #00332a;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 78, 66, 0.2);
 }
 
-/* Стили для информационного бейджа */
-.syntheses-page .badge.bg-info {
+.syntheses-page .btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+  background: transparent;
+}
+
+.syntheses-page .btn-outline-secondary:hover {
+  background: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+}
+
+/* Стили для информационных бейджей в шапке */
+.syntheses-page .mb-3 .badge.bg-info {
   background: #00A88F !important;
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
   line-height: 1.2;
   padding: 10px 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 168, 143, 0.2);
+  border: none;
+  min-width: 160px;
+  text-align: center;
+}
+
+.syntheses-page .mb-3 .badge.bg-success {
+  background: #28a745 !important;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 5px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+  border: none;
+  margin-left: 12px;
+  text-align: center;
+}
+
+/* Стили для спиннера загрузки реакций */
+.syntheses-page .mb-3 .d-flex.align-items-center {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-left: 12px;
+}
+
+.syntheses-page .mb-3 .d-flex.align-items-center .spinner-border {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+  color: #00A88F;
+  margin-right: 8px;
+}
+
+.syntheses-page .mb-3 .d-flex.align-items-center .text-muted {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6c757d;
+  white-space: nowrap;
 }
 
 /* Стили для алертов */
@@ -191,6 +384,22 @@
   margin-top: 10px;
 }
 
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.synthesis-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
 /* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
 @media (max-width: 767px) {
   .syntheses-page .container {
@@ -203,28 +412,70 @@
     margin-bottom: 1rem;
   }
   
-  .syntheses-page .table {
+  .syntheses-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .synthesis-card .card-body {
+    padding: 15px;
+  }
+  
+  .synthesis-card .card-title {
+    font-size: 16px;
+  }
+  
+  .synthesis-card .card-subtitle {
     font-size: 12px;
   }
   
-  .syntheses-page .table thead th {
-    font-size: 12px;
-    padding: 10px 6px;
-  }
-  
-  .syntheses-page .table tbody td {
-    font-size: 11px;
-    padding: 8px 4px;
-  }
-  
-  .syntheses-page .badge {
+  .synthesis-reactions-badge {
     font-size: 10px;
     padding: 4px 8px;
   }
   
+  .detail-label,
+  .detail-value {
+    font-size: 12px;
+  }
+  
+  .synthesis-actions .btn {
+    font-size: 12px;
+    padding: 6px 12px;
+    min-width: 80px;
+  }
+  
+  .synthesis-actions {
+    gap: 5px;
+  }
+  
   .syntheses-page .btn {
-    font-size: 11px;
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  
+  .synthesis-status {
+    font-size: 10px;
+    padding: 4px 8px;
+    min-width: 90px;
+    height: 20px;
+  }
+  
+  .syntheses-page .mb-3 .badge.bg-info,
+  .syntheses-page .mb-3 .badge.bg-success {
+    font-size: 12px;
+    padding: 8px 12px;
+    min-width: auto;
+    margin-bottom: 8px;
+  }
+  
+  .syntheses-page .mb-3 .d-flex.align-items-center {
     padding: 6px 10px;
+    margin-left: 0;
+  }
+  
+  .syntheses-page .mb-3 .d-flex.align-items-center .text-muted {
+    font-size: 12px;
   }
   
   .syntheses-page .alert {
@@ -239,14 +490,6 @@
   .syntheses-page .alert-info p {
     font-size: 14px;
   }
-  
-  /* Скрываем некоторые колонки на мобильных */
-  .syntheses-page .table thead th:nth-child(4),
-  .syntheses-page .table thead th:nth-child(5),
-  .syntheses-page .table tbody td:nth-child(4),
-  .syntheses-page .table tbody td:nth-child(5) {
-    display: none;
-  }
 }
 
 /* ПЛАНШЕТНАЯ АДАПТИВНОСТЬ */
@@ -259,63 +502,104 @@
     font-size: 28px;
   }
   
-  .syntheses-page .table thead th {
-    font-size: 14px;
+  .syntheses-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
   
-  .syntheses-page .table tbody td {
+  .synthesis-card .card-title {
+    font-size: 17px;
+  }
+  
+  .detail-label,
+  .detail-value {
     font-size: 13px;
   }
   
-  /* Скрываем колонку создателя на планшетах */
-  .syntheses-page .table thead th:nth-child(5),
-  .syntheses-page .table tbody td:nth-child(5) {
-    display: none;
+  .synthesis-status {
+    min-width: 100px;
+  }
+  
+  .syntheses-page .mb-3 .badge.bg-info,
+  .syntheses-page .mb-3 .badge.bg-success {
+    font-size: 14px;
+    padding: 10px 16px;
   }
 }
 
 /* БОЛЬШИЕ ЭКРАНЫ */
-@media (min-width: 1200px) {
-  .syntheses-page .container {
-    max-width: 1200px;
+@media (min-width: 1025px) {
+  .syntheses-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
   }
   
-  .syntheses-page .table tbody td {
-    font-size: 15px;
-    padding: 15px 12px;
+  .synthesis-card .card-body {
+    padding: 25px;
+  }
+  
+  .syntheses-page .mb-3 .d-flex {
+    flex-wrap: nowrap;
   }
 }
 
-/* Дополнительные улучшения */
+/* Стили для пустого состояния */
 .syntheses-page .text-center {
   padding: 2rem 0;
 }
 
-.syntheses-page .mb-3 {
-  display: flex;
-  justify-content: center;
+/* Стили для формы фильтров */
+.syntheses-page .card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
 }
 
-/* Анимации */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.syntheses-page .card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: 'Inter';
+  font-weight: 600;
+  font-size: 18px;
+  color: #000;
+  padding: 15px 20px;
+  border-radius: 12px 12px 0 0 !important;
 }
 
-.syntheses-page .table tbody tr {
-  animation: fadeIn 0.3s ease-out;
+.syntheses-page .form-label {
+  font-family: 'Inter';
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
 }
 
-.syntheses-page .table tbody tr:nth-child(even) {
-  animation-delay: 0.05s;
+.syntheses-page .form-select,
+.syntheses-page .form-control {
+  font-family: 'Inter';
+  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid #666666;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background: white;
+  width: 100%;
 }
 
-.syntheses-page .table tbody tr:nth-child(odd) {
-  animation-delay: 0.1s;
+.syntheses-page .form-select:focus,
+.syntheses-page .form-control:focus {
+  border-color: #00A88F;
+  box-shadow: 0 0 0 0.25rem rgba(0, 168, 143, 0.25);
+  outline: none;
+}
+
+/* Тень для спиннеров */
+.spinner-border {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.me-3 {
+  background: #004E42;
 }

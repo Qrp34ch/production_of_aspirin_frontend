@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api';
-// import { type Reaction } from '../modules/type';
+// Убираем неиспользуемый импорт RootState
+// import type { RootState } from '../store/store';
 
 interface SynthesisReaction {
   reaction: {
@@ -14,9 +15,9 @@ interface SynthesisReaction {
     DensityRM?: number;
     MolarMassRM?: number;
   };
-  volume_sm: number;
-  volume_rm: number;
-  count: number; // Добавляем count здесь
+  volume_sm: number | null;
+  volume_rm: number | null;
+  count: number;
 }
 
 interface Synthesis {
@@ -27,7 +28,7 @@ interface Synthesis {
   finished_at: string;
   creator_login: string;
   moderator_login: string;
-  purity: number;
+  purity: number | null;
   reactions: SynthesisReaction[];
 }
 
@@ -52,7 +53,6 @@ const initialState: SynthesisState = {
   error: null,
 };
 
-// Интерфейсы для API ответов
 interface SynthesisIconResponse {
   id_synthesis?: number;
   items_count?: number;
@@ -73,7 +73,6 @@ export const getSynthesisIcon = createAsyncThunk(
       const response = await api.api.synthesisIconList();
       console.log('Full API response:', response.data);
       
-      // Данные приходят напрямую в response.data
       const responseData = response.data as SynthesisIconResponse;
       
       if (responseData && responseData.id_synthesis !== undefined && responseData.id_synthesis !== null) {
@@ -115,7 +114,6 @@ export const getSyntheses = createAsyncThunk(
       const responseData = response.data;
       
       if (responseData && responseData.status === 'success' && Array.isArray(responseData.data)) {
-        // Преобразуем данные из API в нашу внутреннюю структуру
         const syntheses = responseData.data.map((item: any) => ({
           id: item.ID,
           status: item.Status,
@@ -125,7 +123,7 @@ export const getSyntheses = createAsyncThunk(
           creator_login: item.CreatorLogin,
           moderator_login: item.ModeratorLogin,
           purity: item.Purity,
-          reactions: [] // Пока оставляем пустым, так как в API нет информации о реакциях
+          reactions: []
         })) as Synthesis[];
         
         console.log('Transformed syntheses:', syntheses);
@@ -148,7 +146,6 @@ export const getSynthesis = createAsyncThunk(
       const response = await api.api.synthesisDetail(synthesisId);
       console.log('Synthesis API response:', response.data);
       
-      // Преобразуем структуру ответа
       const responseData = response.data as any;
       
       if (responseData && responseData.data) {
@@ -157,7 +154,6 @@ export const getSynthesis = createAsyncThunk(
         
         let reactionsWithCount: SynthesisReaction[] = [];
         
-        // Используем данные из data_pr где есть количество и объемы
         if (responseData.data_pr && Array.isArray(responseData.data_pr)) {
           console.log('Found reactions with count in data_pr:', responseData.data_pr.length);
           
@@ -175,14 +171,13 @@ export const getSynthesis = createAsyncThunk(
                 DensityRM: reaction.DensityRM,
                 MolarMassRM: reaction.MolarMassRM
               },
-              volume_sm: reaction.volume_sm || 0, // Используем реальный объем из API
-              volume_rm: reaction.volume_rm || 0,
-              count: reaction.Count || 1 // Используем реальное количество из API
+              volume_sm: reaction.volume_sm ?? null,
+              volume_rm: reaction.volume_rm ?? null,
+              count: reaction.Count || 1
             };
           });
         } else {
           console.warn('No data_pr found, using Reactions as fallback');
-          // Fallback - используем обычные реакции если data_pr нет
           if (responseData.data.Reactions && Array.isArray(responseData.data.Reactions)) {
             reactionsWithCount = responseData.data.Reactions.map((reaction: any) => ({
               reaction: {
@@ -196,9 +191,8 @@ export const getSynthesis = createAsyncThunk(
                 DensityRM: reaction.DensityRM,
                 MolarMassRM: reaction.MolarMassRM
               },
-              volume_sm: 10.0, // Временное значение по умолчанию
-              // volume_rm: 10.0,
-              count: 1 // Временное значение по умолчанию
+              volume_sm: null,
+              count: 1
             }));
           }
         }
@@ -211,14 +205,13 @@ export const getSynthesis = createAsyncThunk(
           finished_at: responseData.data.DateFinish || '',
           creator_login: responseData.data.CreatorLogin,
           moderator_login: responseData.data.ModeratorLogin || '',
-          purity: responseData.data.Purity || 0,
+          purity: responseData.data.Purity ?? null,
           reactions: reactionsWithCount
         } as Synthesis;
         
         console.log('Final synthesis object:', synthesis);
         console.log('Number of reactions in final object:', synthesis.reactions.length);
         
-        // Логируем количество и объемы для проверки
         synthesis.reactions.forEach((reaction, index) => {
           console.log(`Reaction ${index + 1}:`, {
             title: reaction.reaction.Title,
@@ -248,7 +241,6 @@ export const getSynthesisWithReactions = createAsyncThunk(
   'synthesis/getWithReactions',
   async (synthesisId: number, { rejectWithValue }) => {
     try {
-      // Сначала получаем основной синтез
       const synthesisResponse = await api.api.synthesisDetail(synthesisId);
       const synthesisData = synthesisResponse.data.data as any;
       
@@ -256,11 +248,8 @@ export const getSynthesisWithReactions = createAsyncThunk(
         throw new Error('Данные синтеза не получены');
       }
       
-      // Затем получаем реакции с количеством через ваш бэкенд
-      // (нужно добавить соответствующий endpoint в API)
       let reactionsWithCount: SynthesisReaction[] = [];
       
-      // Временное решение - используем реакции из основного ответа
       if (synthesisData.Reactions && Array.isArray(synthesisData.Reactions)) {
         reactionsWithCount = synthesisData.Reactions.map((reaction: any) => ({
           reaction: {
@@ -274,8 +263,8 @@ export const getSynthesisWithReactions = createAsyncThunk(
             DensityRM: reaction.DensityRM,
             MolarMassRM: reaction.MolarMassRM
           },
-          volume_sm: 10.0, // Временное значение
-          count: 1 // Временное значение
+          volume_sm: null,
+          count: 1
         }));
       }
       
@@ -287,7 +276,7 @@ export const getSynthesisWithReactions = createAsyncThunk(
         finished_at: synthesisData.DateFinish || '',
         creator_login: synthesisData.CreatorLogin,
         moderator_login: synthesisData.ModeratorLogin || '',
-        purity: synthesisData.Purity || 0,
+        purity: synthesisData.Purity ?? null,
         reactions: reactionsWithCount
       } as Synthesis;
       
@@ -298,7 +287,7 @@ export const getSynthesisWithReactions = createAsyncThunk(
   }
 );
 
-// Action для сохранения концентрации
+// Action для обновления концентрации
 export const updateSynthesisPurity = createAsyncThunk(
   'synthesis/updatePurity',
   async ({ synthesisId, purity }: { synthesisId: number; purity: number }, { rejectWithValue }) => {
@@ -312,7 +301,7 @@ export const updateSynthesisPurity = createAsyncThunk(
   }
 );
 
-// Action для сохранения объемов реакций
+// Action для обновления объемов реакций
 export const updateReactionVolume = createAsyncThunk(
   'synthesis/updateReactionVolume',
   async ({ 
@@ -344,23 +333,26 @@ export const saveSynthesisChanges = createAsyncThunk(
     volumes
   }: {
     synthesisId: number;
-    purity: number;
-    volumes: { [key: number]: number };
+    purity: number | null;
+    volumes: { [key: number]: number | null };
   }, { rejectWithValue, dispatch }) => {
     try {
-      // Сохраняем концентрацию
-      if (purity !== undefined) {
+      // Сохраняем концентрацию, если она указана и является числом
+      if (purity !== null && purity !== undefined && !isNaN(purity)) {
         await dispatch(updateSynthesisPurity({ synthesisId, purity })).unwrap();
       }
 
-      // Сохраняем объемы для каждой реакции
-      const volumePromises = Object.entries(volumes).map(([reactionId, volume]) => 
-        dispatch(updateReactionVolume({ 
-          synthesisId, 
-          reactionId: parseInt(reactionId), 
-          volume_sm: volume 
-        })).unwrap()
-      );
+      // Сохраняем объемы для каждой реакции, если они указаны
+      const volumePromises = Object.entries(volumes).map(([reactionId, volume]) => {
+        if (volume !== null && volume !== undefined && !isNaN(volume)) {
+          return dispatch(updateReactionVolume({ 
+            synthesisId, 
+            reactionId: parseInt(reactionId), 
+            volume_sm: volume 
+          })).unwrap();
+        }
+        return Promise.resolve();
+      });
 
       await Promise.all(volumePromises);
 
@@ -397,7 +389,7 @@ export const formSynthesis = createAsyncThunk(
   }
 );
 
-// Добавляем action для обновления синтеза
+// Action для обновления синтеза
 export const updateSynthesis = createAsyncThunk(
   'synthesis/update',
   async ({ synthesisId, purity }: { synthesisId: number; purity: number }, { rejectWithValue }) => {
@@ -407,6 +399,83 @@ export const updateSynthesis = createAsyncThunk(
       return { purity, response: responseData };
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.description || 'Ошибка обновления синтеза');
+    }
+  }
+);
+
+// Action для сохранения только концентрации
+export const savePurityOnly = createAsyncThunk(
+  'synthesis/savePurityOnly',
+  async ({ synthesisId, purity }: { synthesisId: number; purity: number | null }, { rejectWithValue }) => {
+    try {
+      // Если purity равно null или NaN, не отправляем запрос
+      if (purity === null || isNaN(purity)) {
+        return rejectWithValue('Некорректное значение концентрации');
+      }
+      
+      const response = await api.api.synthesisUpdate(synthesisId, { purity });
+      const responseData = response.data as SynthesisUpdateResponse;
+      return { purity, response: responseData };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.description || 'Ошибка сохранения концентрации');
+    }
+  }
+);
+export const saveVolumesOnly = createAsyncThunk(
+  'synthesis/saveVolumesOnly',
+  async ({
+    synthesisId,
+    volumes
+  }: {
+    synthesisId: number;
+    volumes: { [key: number]: number | null };
+  }, { rejectWithValue, dispatch }) => {
+    try {
+      // Сохраняем только объемы для каждой реакции, если они указаны
+      const volumePromises = Object.entries(volumes).map(([reactionId, volume]) => {
+        if (volume !== null && volume !== undefined && !isNaN(volume)) {
+          return dispatch(saveReactionVolume({ 
+            synthesisId, 
+            reactionId: parseInt(reactionId), 
+            volume_sm: volume 
+          })).unwrap();
+        }
+        return Promise.resolve();
+      });
+
+      await Promise.all(volumePromises);
+
+      return { message: 'Объемы успешно сохранены' };
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка сохранения объемов');
+    }
+  }
+);
+// Action для сохранения конкретного объема реакции
+export const saveReactionVolume = createAsyncThunk(
+  'synthesis/saveReactionVolume',
+  async ({
+    //synthesisId,
+    reactionId,
+    volume_sm
+  }: {
+    synthesisId: number;
+    reactionId: number;
+    volume_sm: number | null;
+  }, { rejectWithValue }) => {
+    try {
+      // Если volume_sm равно null или NaN, не отправляем запрос
+      if (volume_sm === null || isNaN(volume_sm)) {
+        return rejectWithValue('Некорректное значение объема');
+      }
+      
+      const response = await api.api.reactionSynthesisUpdate({
+        reaction_id: reactionId,
+        volume_sm: volume_sm
+      });
+      return { reactionId, volume_sm, response: response.data };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.description || 'Ошибка сохранения объема');
     }
   }
 );
@@ -430,92 +499,171 @@ const synthesisSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Get Synthesis Icon
+      .addCase(getSynthesisIcon.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(getSynthesisIcon.fulfilled, (state, action) => {
+        state.loading = false;
         state.synthesisIcon = action.payload;
       })
       .addCase(getSynthesisIcon.rejected, (state) => {
+        state.loading = false;
         state.synthesisIcon = null;
       })
+      
       // Add Reaction to Synthesis
       .addCase(addReactionToSynthesis.fulfilled, (state) => {
-        // Обновляем счетчик в иконке
         if (state.synthesisIcon) {
           state.synthesisIcon.count += 1;
         }
       })
+      
       // Get Syntheses
+      .addCase(getSyntheses.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(getSyntheses.fulfilled, (state, action) => {
+        state.loading = false;
         state.syntheses = action.payload || [];
       })
+      .addCase(getSyntheses.rejected, (state) => {
+        state.loading = false;
+      })
+      
       // Get Synthesis
+      .addCase(getSynthesis.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(getSynthesis.fulfilled, (state, action) => {
+        state.loading = false;
         state.currentSynthesis = action.payload || null;
       })
+      .addCase(getSynthesis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      
+      // Get Synthesis With Reactions
+      .addCase(getSynthesisWithReactions.fulfilled, (state, action) => {
+        state.currentSynthesis = action.payload || null;
+      })
+      
       // Update Synthesis
       .addCase(updateSynthesis.fulfilled, (state, action) => {
         if (state.currentSynthesis) {
           state.currentSynthesis.purity = action.payload.purity;
         }
       })
+      
+      // Update Synthesis Purity
       .addCase(updateSynthesisPurity.fulfilled, (state, action) => {
-      if (state.currentSynthesis) {
-        state.currentSynthesis.purity = action.payload.purity;
-      }
-    })
-    
-    // Update Reaction Volume
-    .addCase(updateReactionVolume.fulfilled, (state, action) => {
-      if (state.currentSynthesis) {
-        const { reactionId, volume_sm } = action.payload;
-        const reaction = state.currentSynthesis.reactions.find(
-          r => r.reaction.ID === reactionId
-        );
-        if (reaction) {
-          reaction.volume_sm = volume_sm;
+        if (state.currentSynthesis) {
+          state.currentSynthesis.purity = action.payload.purity;
         }
-      }
-    })
-    
-    // Save All Changes
-    .addCase(saveSynthesisChanges.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(saveSynthesisChanges.fulfilled, (state) => {
-      state.loading = false;
-      state.error = null;
-    })
-    .addCase(saveSynthesisChanges.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    })
-    .addCase(deleteSynthesis.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(deleteSynthesis.fulfilled, (state) => {
-      state.loading = false;
-      state.currentSynthesis = null;
-      state.error = null;
-    })
-    .addCase(deleteSynthesis.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    })
-    
-    // Form Synthesis
-    .addCase(formSynthesis.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(formSynthesis.fulfilled, (state) => {
-      state.loading = false;
-      if (state.currentSynthesis) {
-        state.currentSynthesis.status = 'сформирован';
-      }
-      state.error = null;
-    })
-    .addCase(formSynthesis.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
+      })
+      
+      // Update Reaction Volume
+      .addCase(updateReactionVolume.fulfilled, (state, action) => {
+        if (state.currentSynthesis) {
+          const { reactionId, volume_sm } = action.payload;
+          const reaction = state.currentSynthesis.reactions.find(
+            (r: SynthesisReaction) => r.reaction.ID === reactionId
+          );
+          if (reaction) {
+            reaction.volume_sm = volume_sm;
+          }
+        }
+      })
+      
+      // Save Purity Only
+      .addCase(savePurityOnly.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(savePurityOnly.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.currentSynthesis) {
+          state.currentSynthesis.purity = action.payload.purity;
+        }
+      })
+      .addCase(savePurityOnly.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      
+      // Save Reaction Volume
+      .addCase(saveReactionVolume.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveReactionVolume.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.currentSynthesis) {
+          const { reactionId, volume_sm } = action.payload;
+          const reaction = state.currentSynthesis.reactions.find(
+            (r: SynthesisReaction) => r.reaction.ID === reactionId
+          );
+          if (reaction) {
+            reaction.volume_sm = volume_sm;
+          }
+        }
+      })
+      .addCase(saveReactionVolume.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      
+      // Save All Changes
+      .addCase(saveSynthesisChanges.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveSynthesisChanges.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(saveSynthesisChanges.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(saveVolumesOnly.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveVolumesOnly.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(saveVolumesOnly.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      
+      // Delete Synthesis
+      .addCase(deleteSynthesis.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteSynthesis.fulfilled, (state) => {
+        state.loading = false;
+        state.currentSynthesis = null;
+        state.error = null;
+      })
+      .addCase(deleteSynthesis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      
+      // Form Synthesis
+      .addCase(formSynthesis.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(formSynthesis.fulfilled, (state) => {
+        state.loading = false;
+        if (state.currentSynthesis) {
+          state.currentSynthesis.status = 'сформирован';
+        }
+        state.error = null;
+      })
+      .addCase(formSynthesis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

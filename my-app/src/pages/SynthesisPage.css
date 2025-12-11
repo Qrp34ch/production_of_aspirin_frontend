@@ -669,3 +669,413 @@
         min-width: 200px;
     }
 }
+
+/* Стили для кнопок сохранения (аналогично ReactionsPage.css) */
+
+/* Контейнер для всех кнопок сохранения */
+/* .save-buttons-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 25px 0;
+  padding: 20px;
+  gap: 15px;
+  width: 100%;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+} */
+
+.save-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Основные стили кнопок (аналогично frame-17/frame-18) */
+.save-changes-btn,
+.save-all-btn,
+.save-field-btn,
+.save-purity-btn,
+.action-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  gap: 8px;
+  min-width: 140px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
+  text-align: center;
+  border: 2px solid;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* Кнопка "Сохранить объемы" (зеленая, как frame-18) */
+.save-changes-btn {
+  background: #004E42;
+  border-color: #004E42;
+  color: white;
+}
+
+.save-changes-btn:hover:not(:disabled) {
+  background: #00332a;
+  border-color: #00332a;
+  transform: translateY(-1px);
+}
+
+.save-changes-btn:disabled {
+  background: #6c757d;
+  border-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* Кнопка "Сохранить всю заявку" (бирюзовая outline, как frame-17) */
+.save-all-btn {
+  background: transparent;
+  border-color: #00A88F;
+  color: #00A88F;
+}
+
+.save-all-btn:hover:not(:disabled) {
+  background: #00A88F;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.save-all-btn:disabled {
+  border-color: #6c757d;
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* Кнопки рядом с полями ввода (маленькие) */
+.save-field-btn {
+  padding: 8px 16px;
+  height: 38px;
+  min-width: auto;
+  font-size: 14px;
+}
+
+/* Кнопка "Сохранить концентрацию" (бирюзовая outline) */
+.save-field-btn.btn-outline-primary {
+  background: transparent;
+  border-color: #00A88F;
+  color: #00A88F;
+}
+
+.save-field-btn.btn-outline-primary:hover:not(:disabled) {
+  background: #00A88F;
+  color: white;
+}
+
+/* Кнопка "Сохранить объем" (серая outline) */
+.save-field-btn.btn-outline-secondary {
+  background: transparent;
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.save-field-btn.btn-outline-secondary:hover:not(:disabled) {
+  background: #6c757d;
+  color: white;
+}
+
+/* Кнопки действий "Сформировать заявку" и "Очистить" */
+.action-btn {
+  padding: 12px 30px;
+  min-width: 160px;
+}
+
+/* Кнопка "Сформировать заявку" (успех, зеленая) */
+.action-btn.btn-success {
+  background: #004E42;
+  border-color: #004E42;
+  color: white;
+}
+
+.action-btn.btn-success:hover:not(:disabled) {
+  background: #00332a;
+  border-color: #00332a;
+}
+
+/* Кнопка "Очистить" (опасность, красная) */
+.action-btn.btn-danger {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.action-btn.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+  border-color: #bd2130;
+}
+
+/* Подсказка под кнопками */
+.save-buttons-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  width: 100%;
+}
+
+/* Группа полей ввода с кнопками
+.field-input-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+} */
+
+.field-input {
+  flex: 1;
+  max-width: 150px;
+  padding: 8px 12px;
+  border: 1px solid #666666;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: #00A88F;
+  box-shadow: 0 0 0 0.2rem rgba(0, 168, 143, 0.25);
+}
+
+.field-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: #6c757d;
+}
+
+.field-actions {
+  display: flex;
+  gap: 5px;
+}
+
+/* Стили для секции полей расчета
+.calculation-fields {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+} */
+
+.section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.field-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.purity-field,
+.reaction-volume-field {
+  margin-bottom: 20px;
+}
+
+/* Кнопки действий внизу страницы */
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 30px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 30px;
+}
+
+/* Спиннеры внутри кнопок */
+.save-changes-btn .spinner-border,
+.save-all-btn .spinner-border,
+.save-field-btn .spinner-border,
+.action-btn .spinner-border {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 767px) {
+  .save-buttons-section {
+    padding: 15px;
+    margin: 15px 0;
+  }
+  
+  .save-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .save-changes-btn,
+  .save-all-btn,
+  .save-field-btn,
+  .save-purity-btn,
+  .action-btn {
+    width: 100%;
+    min-width: 100%;
+  }
+  
+  .field-input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .field-input {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .field-actions {
+    justify-content: center;
+  }
+  
+  .calculation-fields {
+    padding: 15px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .action-btn {
+    width: 100%;
+  }
+}
+
+/* Планшетная адаптивность */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .save-buttons-section {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .save-buttons {
+    justify-content: space-around;
+  }
+  
+  .save-changes-btn,
+  .save-all-btn {
+    min-width: 180px;
+  }
+}
+
+/* Большие экраны */
+@media (min-width: 1025px) {
+  .save-buttons-section {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .calculation-fields {
+    max-width: 700px;
+  }
+}
+
+/* Стили для состояния загрузки */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.loading-spinner .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 20px;
+}
+
+.loading-spinner p {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #666;
+}
+
+/* Стили для сообщений */
+.no-reactions-message,
+.empty-synthesis {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  margin: 20px 0;
+}
+
+.no-reactions-message p,
+.empty-synthesis .alert-info h5,
+.empty-synthesis .alert-info p {
+  font-family: 'Inter', sans-serif;
+}
+
+.empty-synthesis .alert-info {
+  background: #f8f9fa;
+  border-color: #00A88F;
+  border-left: 4px solid #00A88F;
+}
+
+.empty-synthesis .alert-info h5 {
+  color: #004E42;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.empty-synthesis .alert-info p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.empty-synthesis .btn {
+  background: #00A88F;
+  border-color: #00A88F;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.empty-synthesis .btn:hover {
+  background: #004E42;
+  border-color: #004E42;
+}

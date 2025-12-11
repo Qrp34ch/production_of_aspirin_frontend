@@ -60,7 +60,7 @@ export default defineConfig({
     },
     proxy: {
       '/API': {
-        target: 'https://1fa47e4aa7096d.lhr.life',
+        target: 'https://192.168.56.1:8080',
         changeOrigin: true,
         secure: false,
       },

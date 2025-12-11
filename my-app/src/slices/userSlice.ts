@@ -22,6 +22,9 @@ const initialState: UserState = {
   error: null,
 };
 
+// Флаг для определения первой загрузки приложения
+let isFirstLoad = true;
+
 // Асинхронные действия
 export const loginUser = createAsyncThunk(
   'user/login',
@@ -79,6 +82,48 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+// Проверка авторизации с автоматическим сбросом при первой загрузке
+export const checkAuth = createAsyncThunk(
+  'user/checkAuth',
+  async (_, { rejectWithValue }) => {
+    // Если это первая загрузка приложения - ВСЕГДА сбрасываем авторизацию
+    if (isFirstLoad) {
+      isFirstLoad = false;
+      console.log('🔄 Первая загрузка приложения - сбрасываем авторизацию');
+      localStorage.removeItem('authToken'); // Очищаем токен
+      return rejectWithValue('Требуется вход после перезагрузки страницы');
+    }
+    
+    // Для последующих проверок работаем как обычно
+    try {
+      const token = localStorage.getItem('authToken');
+      
+      if (!token) {
+        console.log('checkAuth: токен не найден');
+        return rejectWithValue('Токен не найден');
+      }
+
+      const response = await api.api.usersProfileList();
+      const userData = response.data.data;
+      
+      if (userData) {
+        return {
+          id: userData.id || 0,
+          login: userData.login || '',
+          fio: userData.fio || '',
+          is_moderator: userData.is_moderator || false
+        } as User;
+      }
+      
+      throw new Error('Данные пользователя не получены');
+    } catch (error: any) {
+      console.error('checkAuth: ошибка:', error);
+      localStorage.removeItem('authToken');
+      return rejectWithValue(error.response?.data?.description || 'Ошибка проверки авторизации');
+    }
+  }
+);
+
 export const getProfile = createAsyncThunk(
   'user/getProfile',
   async (_, { rejectWithValue }) => {
@@ -127,6 +172,18 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
     },
+    // Редюсер для принудительного сброса состояния
+    resetAuthState: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
+      localStorage.removeItem('authToken');
+    },
+    // Функция для сброса флага first load (например, при тестировании)
+    resetFirstLoad: () => {
+      isFirstLoad = true;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -165,7 +222,28 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.error = null;
       })
-      // Get Profile
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = action.payload as string;
+      })
+      // Check Auth (новая функция)
+      .addCase(checkAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+        state.error = null;
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = null;
+      })
+      // Get Profile (оставляем для совместимости)
       .addCase(getProfile.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthenticated = true;
@@ -177,5 +255,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { clearError, setUser } = userSlice.actions;
+export const { clearError, setUser, resetAuthState, resetFirstLoad } = userSlice.actions;
 export default userSlice.reducer;
