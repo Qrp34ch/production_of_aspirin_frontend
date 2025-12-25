@@ -1,40 +1,4 @@
-// import { useEffect, type FC } from 'react';
-// import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import { Navigation } from './components/Navigation';
-// // import { BreadCrumbs } from './components/BreadCrumbs';
-// import { PWAInstallPrompt } from './components/PWAInstallPrompt';
-// import { HomePage } from './pages/HomePage';
-// import { ReactionsPage } from './pages/ReactionsPage';
-// import { ReactionDetailPage } from './pages/ReactionDetailPage';
-// import { ROUTES } from '../Routes';
-// // import { BASE_PATH } from './target_config';
-// import './App.css';
-
-// const App: FC = () => {
-//   useEffect(() => {
-//     if (window.__TAURI__) {
-//       console.log('Running in Tauri environment');
-//     }
-//   }, []);
-//   return (
-//     <BrowserRouter basename="/RIP_frontend">
-//       <div className="App">
-//         <Navigation />
-//         <Routes>
-//           <Route path={ROUTES.HOME} element={<HomePage />} />
-//           <Route path={ROUTES.REACTION} element={<ReactionsPage />} />
-//           <Route path={ROUTES.REACTION_DETAIL} element={<ReactionDetailPage />} />
-//         </Routes>
-        
-//         {/* PWA Install Prompt */}
-//         {!window.__TAURI__ && <PWAInstallPrompt />}
-//       </div>
-//     </BrowserRouter>
-//   );
-// };
-
-// export default App;
-
+// App.tsx
 import { useEffect, type FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
@@ -49,23 +13,31 @@ import SynthesesPage from './pages/SynthesesPage';
 import ProfilePage from './pages/ProfilePage';
 import { ROUTES } from '../Routes';
 import './App.css';
-import { resetFirstLoad } from './slices/userSlice';
+import { resetUserState } from './slices/userSlice';
 import { useDispatch } from 'react-redux';
-// import { checkAuth } from './slices/userSlice';
+import type { AppDispatch } from './store/store'; // Импортируем тип AppDispatch
 
 const App: FC = () => {
-  localStorage.removeItem('authToken');
-  // useEffect(() => {
-  //   resetFirstLoad();
-  //   if (window.__TAURI__) {
-  //     console.log('Running in Tauri environment');
-  //   }
-  // }, []);
-  const dispatch = useDispatch();
+  // Используем типизированный dispatch
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // Проверяем авторизацию при загрузке приложения
-    dispatch(resetFirstLoad());
+    // Убираем удаление токена - он должен сохраняться!
+    // localStorage.removeItem('authToken'); // УДАЛИТЬ ЭТУ СТРОКУ!
+
+    // 1. При перезагрузке страницы сбрасываем состояние пользователя в Redux
+    dispatch(resetUserState());
+    
+    // 2. Проверяем, есть ли токен в localStorage и восстанавливаем сессию
+    // const token = localStorage.getItem('authToken');
+    // if (token) {
+    //   // Если токен есть, проверяем его валидность
+    //   dispatch(checkAuth());
+    // }
+    
+    if (window.__TAURI__) {
+      console.log('Running in Tauri environment');
+    }
   }, [dispatch]);
 
   return (

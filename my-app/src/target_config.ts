@@ -13,10 +13,10 @@
 //   : '/RIP_frontend';
 
 // https://24206b2a8fee94.lhr.life
-export const API_BASE_URL = 'https://192.168.56.1:8080'
+export const API_BASE_URL = 'http://192.168.56.1:8080'
 
 //export const IMAGE_BASE_URL = 'https://3b3aadbe2c6f88.lhr.life/minio'
-export const IMAGE_BASE_URL = 'https://192.168.56.1:8080/minio'
+export const IMAGE_BASE_URL = 'http://192.168.56.1:8080/minio'
 export const transformImageUrl = (originalUrl: string) => {
   return originalUrl.replace('http://localhost:9000', IMAGE_BASE_URL);
 };

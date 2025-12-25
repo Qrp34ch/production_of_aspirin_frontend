@@ -105,13 +105,29 @@
     width: 100%;
 }
 
-.field-input-group {
+/* Стили для рядов с полями ввода и кнопками */
+.purity-input-row,
+.volume-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.purity-input-row .field-input,
+.volume-input-row .field-input {
+    flex: 0 0 200px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    gap: 10px;
+    padding: 10px 20px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    font-family: 'Inter';
+    font-size: 24px;
+    text-align: center;
 }
 
 .field-input {
@@ -129,45 +145,88 @@
     text-align: center;
 }
 
-/* .save-purity-btn {
-    margin-left: 10px;
-} */
-
+/* Кнопка "Сохранить концентрацию" (бирюзовая градиентная с белым текстом) */
 .save-purity-btn {
-  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
-  border: none;
-  border-radius: 8px;
-  padding: 12px 30px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  margin-left: 10px;
-  color: #FFFFFF;
-  font-family: 'Inter';
-  font-size: 16px;
-  min-width: 120px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+    background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+    color: #FFFFFF; /* Белый текст */
+    font-family: 'Inter';
+    font-size: 16px;
+    min-width: 120px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: default; /* Без изменения курсора при наведении */
 }
 
 .save-purity-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0, 168, 143, 0.3);
-  background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 168, 143, 0.3);
+    background: linear-gradient(135deg, #00A88F 0%, #004E42 100%);
+    color: #FFFFFF; /* Белый текст при наведении */
+    cursor: pointer; /* Но курсор меняется при наведении если кнопка активна */
 }
 
 .save-purity-btn:active:not(:disabled) {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
 .save-purity-btn:disabled {
-  background: #6c757d;
-  transform: none;
-  box-shadow: none;
-  cursor: not-allowed;
+    background: #6c757d;
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: #FFFFFF; /* Белый текст в disabled */
 }
+
+/* Кнопка "Сохранить объем" (белый фон с бирюзовым текстом) */
+.save-volume-btn {
+    background: #FFFFFF; /* Белый фон */
+    border: 2px solid #00A88F; /* Бирюзовая граница */
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+    color: #00A88F; /* Бирюзовый текст как у кнопки концентрации */
+    font-family: 'Inter';
+    font-size: 14px;
+    min-width: 100px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.save-volume-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 168, 143, 0.3);
+    background: #00A88F; /* Бирюзовый фон при наведении */
+    color: #FFFFFF; /* Белый текст при наведении */
+    border-color: #00A88F; /* Бирюзовая граница при наведении */
+}
+
+.save-volume-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.save-volume-btn:disabled {
+    background: #FFFFFF;
+    border-color: #00A88F;
+    color: #00A88F;
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
 /* Reactions Header and Content */
 .reactions-header-container {
     display: flex;
@@ -284,15 +343,60 @@
     border-radius: 10px;
 }
 
+/* Стили для заголовка реакции с кнопкой удаления */
+.reaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .reaction-title {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 40px;
     line-height: 48px;
-    text-align: center;
+    text-align: left;
     color: #000000;
-    width: 100%;
+    flex: 1;
+}
+
+.remove-reaction-btn {
+    background: #dc3545;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF; /* Белый текст */
+    min-width: 90px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.remove-reaction-btn:hover:not(:disabled) {
+    background: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    color: #FFFFFF; /* Белый текст при наведении */
+}
+
+.remove-reaction-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.remove-reaction-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.65;
+    color: #FFFFFF; /* Белый текст в disabled */
 }
 
 .reaction-content {
@@ -419,261 +523,10 @@
     margin: 0;
 }
 
-/* ========== АДАПТИВНОСТЬ ========== */
-
-/* Планшеты (768px - 1024px) */
-@media (max-width: 1024px) {
-    .synthesis-container {
-        padding: 15px;
-        max-width: 95%;
-    }
-    
-    .field-label {
-        font-size: 28px;
-        line-height: 36px;
-        min-width: 180px;
-    }
-    
-    .field-value {
-        font-size: 20px;
-        height: 50px;
-    }
-    
-    .section-title {
-        font-size: 28px;
-        line-height: 36px;
-    }
-    
-    .reaction-title {
-        font-size: 32px;
-        line-height: 40px;
-    }
-    
-    .material-title,
-    .material-name {
-        font-size: 18px;
-        line-height: 32px;
-    }
-    
-    .field-input {
-        font-size: 20px;
-        padding: 8px 15px;
-        width: 150px;
-    }
-}
-
-/* Мобильные устройства (576px - 768px) */
-@media (max-width: 768px) {
-    .synthesis-page {
-        padding-top: 70px;
-    }
-    
-    .synthesis-container {
-        padding: 10px;
-        max-width: 100%;
-    }
-    
-    .user-info-section {
-        padding: 5px;
-    }
-    
-    .user-name-field,
-    .date-field {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    
-    .field-label {
-        font-size: 24px;
-        line-height: 32px;
-        min-width: auto;
-        width: 100%;
-    }
-    
-    .field-value {
-        font-size: 18px;
-        height: 45px;
-        max-width: 100%;
-    }
-    
-    .section-title {
-        font-size: 24px;
-        line-height: 32px;
-    }
-    
-    .purity-field,
-    .reaction-volume-field {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    
-    .field-input {
-        width: 100%;
-        max-width: 200px;
-        font-size: 18px;
-    }
-    
-    .materials-header,
-    .reaction-content {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .image-placeholder,
-    .reaction-image {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .material-titles,
-    .material-data {
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    
-    .material-title,
-    .material-name {
-        width: 100%;
-        font-size: 18px;
-        line-height: 24px;
-    }
-    
-    .property-column,
-    .property-value {
-        flex: 1;
-        min-width: 80px;
-    }
-    
-    .reaction-title {
-        font-size: 28px;
-        line-height: 36px;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .action-btn {
-        width: 100%;
-        max-width: 300px;
-    }
-}
-
-/* Малые мобильные (до 576px) */
-@media (max-width: 576px) {
-    .synthesis-page {
-        padding-top: 60px;
-    }
-    
-    .field-label {
-        font-size: 20px;
-        line-height: 28px;
-    }
-    
-    .field-value {
-        font-size: 16px;
-        height: 40px;
-        padding: 0 8px;
-    }
-    
-    .section-title {
-        font-size: 20px;
-        line-height: 28px;
-    }
-    
-    .material-title,
-    .material-name {
-        font-size: 16px;
-        line-height: 20px;
-    }
-    
-    .property-column span,
-    .property-value span {
-        font-size: 14px;
-    }
-    
-    .reaction-title {
-        font-size: 24px;
-        line-height: 32px;
-    }
-    
-    .image-placeholder,
-    .reaction-image {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .field-input {
-        font-size: 16px;
-        padding: 6px 12px;
-    }
-    
-    .volume-display {
-        font-size: 18px;
-        line-height: 24px;
-    }
-}
-
-/* Очень маленькие экраны (до 400px) */
-@media (max-width: 400px) {
-    .synthesis-container {
-        padding: 5px;
-    }
-    
-    .material-titles,
-    .material-data {
-        flex-direction: column;
-        gap: 2px;
-    }
-    
-    .property-column,
-    .property-value {
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 5px;
-    }
-    
-    .reaction-content {
-        gap: 5px;
-    }
-    
-    .action-btn {
-        min-width: auto;
-        width: 100%;
-    }
-}
-
-/* Landscape ориентация */
-@media (max-height: 500px) and (orientation: landscape) {
-    .synthesis-page {
-        padding-top: 60px;
-    }
-    
-    .synthesis-container {
-        padding: 10px;
-    }
-    
-    .user-info-section {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .user-name-field,
-    .date-field {
-        flex: 1;
-        min-width: 200px;
-    }
-}
-
-/* Стили для кнопок сохранения (аналогично ReactionsPage.css) */
+/* Стили для кнопок сохранения */
 
 /* Контейнер для всех кнопок сохранения */
-/* .save-buttons-section {
+.save-buttons-section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -684,7 +537,7 @@
   background: #f8f9fa;
   border-radius: 12px;
   border: 1px solid #e0e0e0;
-} */
+}
 
 .save-buttons {
   display: flex;
@@ -696,11 +549,9 @@
   width: 100%;
 }
 
-/* Основные стили кнопок (аналогично frame-17/frame-18) */
+/* Основные стили кнопок */
 .save-changes-btn,
 .save-all-btn,
-.save-field-btn,
-.save-purity-btn,
 .action-btn {
   display: flex;
   flex-direction: row;
@@ -728,13 +579,14 @@
 .save-changes-btn {
   background: #004E42;
   border-color: #004E42;
-  color: white;
+  color: #FFFFFF; /* Белый текст */
 }
 
 .save-changes-btn:hover:not(:disabled) {
   background: #00332a;
   border-color: #00332a;
   transform: translateY(-1px);
+  color: #FFFFFF; /* Белый текст при наведении */
 }
 
 .save-changes-btn:disabled {
@@ -742,58 +594,28 @@
   border-color: #6c757d;
   cursor: not-allowed;
   opacity: 0.65;
+  color: #FFFFFF; /* Белый текст в disabled */
 }
 
-/* Кнопка "Сохранить всю заявку" (бирюзовая outline, как frame-17) */
+/* Кнопка "Сохранить всю заявку" (белый фон с бирюзовым текстом) */
 .save-all-btn {
-  background: transparent;
-  border-color: #00A88F;
-  color: #00A88F;
+  background: #FFFFFF; /* Белый фон */
+  border-color: #00A88F; /* Бирюзовая граница */
+  color: #00A88F; /* Бирюзовый текст */
 }
 
 .save-all-btn:hover:not(:disabled) {
-  background: #00A88F;
-  color: white;
+  background: #00A88F; /* Бирюзовый фон при наведении */
+  color: #FFFFFF; /* Белый текст при наведении */
   transform: translateY(-1px);
 }
 
 .save-all-btn:disabled {
+  background: #f8f9fa;
   border-color: #6c757d;
   color: #6c757d;
   cursor: not-allowed;
   opacity: 0.65;
-}
-
-/* Кнопки рядом с полями ввода (маленькие) */
-.save-field-btn {
-  padding: 8px 16px;
-  height: 38px;
-  min-width: auto;
-  font-size: 14px;
-}
-
-/* Кнопка "Сохранить концентрацию" (бирюзовая outline) */
-.save-field-btn.btn-outline-primary {
-  background: transparent;
-  border-color: #00A88F;
-  color: #00A88F;
-}
-
-.save-field-btn.btn-outline-primary:hover:not(:disabled) {
-  background: #00A88F;
-  color: white;
-}
-
-/* Кнопка "Сохранить объем" (серая outline) */
-.save-field-btn.btn-outline-secondary {
-  background: transparent;
-  border-color: #6c757d;
-  color: #6c757d;
-}
-
-.save-field-btn.btn-outline-secondary:hover:not(:disabled) {
-  background: #6c757d;
-  color: white;
 }
 
 /* Кнопки действий "Сформировать заявку" и "Очистить" */
@@ -806,24 +628,26 @@
 .action-btn.btn-success {
   background: #004E42;
   border-color: #004E42;
-  color: white;
+  color: #FFFFFF; /* Белый текст */
 }
 
 .action-btn.btn-success:hover:not(:disabled) {
   background: #00332a;
   border-color: #00332a;
+  color: #FFFFFF; /* Белый текст при наведении */
 }
 
 /* Кнопка "Очистить" (опасность, красная) */
 .action-btn.btn-danger {
   background: #dc3545;
   border-color: #dc3545;
-  color: white;
+  color: #FFFFFF; /* Белый текст */
 }
 
 .action-btn.btn-danger:hover:not(:disabled) {
   background: #c82333;
   border-color: #bd2130;
+  color: #FFFFFF; /* Белый текст при наведении */
 }
 
 /* Подсказка под кнопками */
@@ -834,24 +658,6 @@
   font-style: italic;
   text-align: center;
   width: 100%;
-}
-
-/* Группа полей ввода с кнопками
-.field-input-group {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  width: 100%;
-} */
-
-.field-input {
-  flex: 1;
-  max-width: 150px;
-  padding: 8px 12px;
-  border: 1px solid #666666;
-  border-radius: 6px;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
 }
 
 .field-input:focus {
@@ -866,12 +672,7 @@
   color: #6c757d;
 }
 
-.field-actions {
-  display: flex;
-  gap: 5px;
-}
-
-/* Стили для секции полей расчета
+/* Стили для секции полей расчета */
 .calculation-fields {
   width: 100%;
   max-width: 800px;
@@ -881,7 +682,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e0e0e0;
-} */
+}
 
 .section-title {
   font-family: 'Inter', sans-serif;
@@ -924,11 +725,14 @@
 /* Спиннеры внутри кнопок */
 .save-changes-btn .spinner-border,
 .save-all-btn .spinner-border,
-.save-field-btn .spinner-border,
-.action-btn .spinner-border {
+.action-btn .spinner-border,
+.save-purity-btn .spinner-border,
+.save-volume-btn .spinner-border,
+.remove-reaction-btn .spinner-border {
   width: 1rem;
   height: 1rem;
   border-width: 0.15em;
+  border-color: currentColor; /* Цвет спиннера соответствует цвету текста */
 }
 
 /* Мобильная адаптивность */
@@ -945,25 +749,27 @@
   
   .save-changes-btn,
   .save-all-btn,
-  .save-field-btn,
-  .save-purity-btn,
   .action-btn {
     width: 100%;
     min-width: 100%;
   }
   
-  .field-input-group {
+  .purity-input-row,
+  .volume-input-row {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .field-input {
-    max-width: 100%;
+  .purity-input-row .field-input,
+  .volume-input-row .field-input {
     width: 100%;
+    max-width: 100%;
   }
   
-  .field-actions {
-    justify-content: center;
+  .save-purity-btn,
+  .save-volume-btn {
+    width: 100%;
+    max-width: 200px;
   }
   
   .calculation-fields {
@@ -980,34 +786,357 @@
   }
 }
 
+/* ========== АДАПТИВНОСТЬ ========== */
+
+/* Планшеты (768px - 1024px) */
+@media (max-width: 1024px) {
+  .synthesis-container {
+      padding: 15px;
+      max-width: 95%;
+  }
+  
+  .field-label {
+      font-size: 28px;
+      line-height: 36px;
+      min-width: 180px;
+  }
+  
+  .field-value {
+      font-size: 20px;
+      height: 50px;
+  }
+  
+  .section-title {
+      font-size: 28px;
+      line-height: 36px;
+  }
+  
+  .reaction-title {
+      font-size: 32px;
+      line-height: 40px;
+  }
+  
+  .material-title,
+  .material-name {
+      font-size: 18px;
+      line-height: 32px;
+  }
+  
+  .field-input {
+      font-size: 20px;
+      padding: 8px 15px;
+      width: 150px;
+  }
+  
+  .purity-input-row .field-input,
+  .volume-input-row .field-input {
+      font-size: 20px;
+      padding: 8px 15px;
+      width: 150px;
+  }
+  
+  .save-purity-btn {
+      min-width: 110px;
+      height: 45px;
+      font-size: 15px;
+  }
+  
+  .save-volume-btn {
+      min-width: 90px;
+      height: 35px;
+      font-size: 13px;
+  }
+}
+
+/* Мобильные устройства (576px - 768px) */
+@media (max-width: 768px) {
+  .synthesis-page {
+      padding-top: 70px;
+  }
+  
+  .synthesis-container {
+      padding: 10px;
+      max-width: 100%;
+  }
+  
+  .user-info-section {
+      padding: 5px;
+  }
+  
+  .user-name-field,
+  .date-field {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+  }
+  
+  .field-label {
+      font-size: 24px;
+      line-height: 32px;
+      min-width: auto;
+      width: 100%;
+  }
+  
+  .field-value {
+      font-size: 18px;
+      height: 45px;
+      max-width: 100%;
+  }
+  
+  .section-title {
+      font-size: 24px;
+      line-height: 32px;
+  }
+  
+  .purity-field,
+  .reaction-volume-field {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+  }
+  
+  .field-input {
+      width: 100%;
+      max-width: 200px;
+      font-size: 18px;
+  }
+  
+  .purity-input-row,
+  .volume-input-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+  }
+  
+  .purity-input-row .field-input,
+  .volume-input-row .field-input {
+      width: 100%;
+      max-width: 200px;
+      font-size: 18px;
+  }
+  
+  .materials-header,
+  .reaction-content {
+      flex-direction: column;
+      gap: 15px;
+  }
+  
+  .reaction-header {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+  }
+  
+  .remove-reaction-btn {
+      align-self: flex-start;
+  }
+  
+  .image-placeholder,
+  .reaction-image {
+      width: 100px;
+      height: 100px;
+  }
+  
+  .material-titles,
+  .material-data {
+      flex-wrap: wrap;
+      gap: 5px;
+  }
+  
+  .material-title,
+  .material-name {
+      width: 100%;
+      font-size: 18px;
+      line-height: 24px;
+  }
+  
+  .property-column,
+  .property-value {
+      flex: 1;
+      min-width: 80px;
+  }
+  
+  .reaction-title {
+      font-size: 28px;
+      line-height: 36px;
+  }
+  
+  .action-buttons {
+      flex-direction: column;
+      align-items: center;
+  }
+  
+  .action-btn {
+      width: 100%;
+      max-width: 300px;
+  }
+  
+  .save-purity-btn,
+  .save-volume-btn {
+      width: 100%;
+      max-width: 200px;
+  }
+}
+
+/* Малые мобильные (до 576px) */
+@media (max-width: 576px) {
+  .synthesis-page {
+      padding-top: 60px;
+  }
+  
+  .field-label {
+      font-size: 20px;
+      line-height: 28px;
+  }
+  
+  .field-value {
+      font-size: 16px;
+      height: 40px;
+      padding: 0 8px;
+  }
+  
+  .section-title {
+      font-size: 20px;
+      line-height: 28px;
+  }
+  
+  .material-title,
+  .material-name {
+      font-size: 16px;
+      line-height: 20px;
+  }
+  
+  .property-column span,
+  .property-value span {
+      font-size: 14px;
+  }
+  
+  .reaction-title {
+      font-size: 24px;
+      line-height: 32px;
+  }
+  
+  .image-placeholder,
+  .reaction-image {
+      width: 80px;
+      height: 80px;
+  }
+  
+  .field-input {
+      font-size: 16px;
+      padding: 6px 12px;
+  }
+  
+  .purity-input-row .field-input,
+  .volume-input-row .field-input {
+      font-size: 16px;
+      padding: 6px 12px;
+  }
+  
+  .volume-display {
+      font-size: 18px;
+      line-height: 24px;
+  }
+  
+  .save-purity-btn {
+      font-size: 14px;
+      min-width: 100px;
+      height: 40px;
+  }
+  
+  .save-volume-btn {
+      font-size: 13px;
+      min-width: 80px;
+      height: 32px;
+  }
+}
+
+/* Очень маленькие экраны (до 400px) */
+@media (max-width: 400px) {
+  .synthesis-container {
+      padding: 5px;
+  }
+  
+  .material-titles,
+  .material-data {
+      flex-direction: column;
+      gap: 2px;
+  }
+  
+  .property-column,
+  .property-value {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 5px;
+  }
+  
+  .reaction-content {
+      gap: 5px;
+  }
+  
+  .action-btn {
+      min-width: auto;
+      width: 100%;
+  }
+  
+  .purity-input-row .field-input,
+  .volume-input-row .field-input {
+      width: 100%;
+  }
+}
+
+/* Landscape ориентация */
+@media (max-height: 500px) and (orientation: landscape) {
+  .synthesis-page {
+      padding-top: 60px;
+  }
+  
+  .synthesis-container {
+      padding: 10px;
+  }
+  
+  .user-info-section {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+  }
+  
+  .user-name-field,
+  .date-field {
+      flex: 1;
+      min-width: 200px;
+  }
+}
+
 /* Планшетная адаптивность */
 @media (min-width: 768px) and (max-width: 1024px) {
   .save-buttons-section {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
   }
   
   .save-buttons {
-    justify-content: space-around;
+      justify-content: space-around;
   }
   
   .save-changes-btn,
   .save-all-btn {
-    min-width: 180px;
+      min-width: 180px;
   }
 }
 
 /* Большие экраны */
 @media (min-width: 1025px) {
   .save-buttons-section {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
   }
   
   .calculation-fields {
-    max-width: 700px;
+      max-width: 700px;
   }
 }
 
@@ -1070,7 +1199,7 @@
 .empty-synthesis .btn {
   background: #00A88F;
   border-color: #00A88F;
-  color: white;
+  color: #FFFFFF; /* Белый текст */
   font-family: 'Inter', sans-serif;
   font-weight: 500;
 }
@@ -1078,4 +1207,5 @@
 .empty-synthesis .btn:hover {
   background: #004E42;
   border-color: #004E42;
+  color: #FFFFFF; /* Белый текст при наведении */
 }

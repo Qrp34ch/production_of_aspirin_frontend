@@ -1,17 +1,17 @@
 import { type FC, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Button, Spinner } from 'react-bootstrap';
+
 import { type AppDispatch, type RootState } from '../store/store';
 import { 
   getSynthesis, 
   clearCurrentSynthesis, 
-  // saveSynthesisChanges, 
   savePurityOnly,
   saveReactionVolume,
-  saveVolumesOnly, // Добавляем новый action
+  // saveVolumesOnly,
   deleteSynthesis, 
-  formSynthesis 
+  formSynthesis,
+  removeReactionFromSynthesis
 } from '../slices/synthesisSlice';
 import { getProfile } from '../slices/userSlice';
 import { Navigation } from '../components/Navigation';
@@ -19,6 +19,7 @@ import { ROUTES } from '../../Routes';
 import { transformImageUrl } from '../target_config';
 import defimage from "../assets/DefaultImage.jpg";
 import './SynthesisPage.css';
+import { Container, Button, Spinner } from 'react-bootstrap';
 import { BreadCrumbs } from '../components/BreadCrumbs';
 
 export const SynthesisPage: FC = () => {
@@ -32,9 +33,10 @@ export const SynthesisPage: FC = () => {
   const [purity, setPurity] = useState<string>('');
   const [volumes, setVolumes] = useState<{ [key: number]: string }>({});
   const [savingPurity, setSavingPurity] = useState<boolean>(false);
-  // const [savingVolumes, setSavingVolumes] = useState<{ [key: number]: boolean }>({});
-  const [savingAll, setSavingAll] = useState<boolean>(false);
-  const [savingVolumesOnly, setSavingVolumesOnly] = useState<boolean>(false); // Новое состояние
+  const [savingVolumes, setSavingVolumes] = useState<{ [key: number]: boolean }>({});
+  // const [savingAll, setSavingAll] = useState<boolean>(false);
+  // const [savingVolumesOnly, setSavingVolumesOnly] = useState<boolean>(false);
+  const [removingReactions, setRemovingReactions] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     if (id) {
@@ -135,155 +137,84 @@ export const SynthesisPage: FC = () => {
   };
 
   // Кнопка сохранения конкретного объема
-  // const handleSaveVolume = async (reactionId: number, volumeStr: string) => {
-  //   if (!id || !reactionId) {
-  //     alert('Ошибка: не указан ID синтеза или реакции');
-  //     return;
-  //   }
-    
-  //   const parsedVolume = parseNumberOrNull(volumeStr);
-    
-  //   if (parsedVolume === null) {
-  //     setSavingVolumes(prev => ({ ...prev, [reactionId]: true }));
-  //     try {
-  //       await dispatch(saveReactionVolume({
-  //         synthesisId: parseInt(id),
-  //         reactionId: reactionId,
-  //         volume_sm: null
-  //       })).unwrap();
-        
-  //       alert(`Объем для реакции очищен!`);
-  //     } catch (error: any) {
-  //       console.error('Ошибка сохранения объема:', error);
-  //       alert(`Ошибка сохранения объема: ${error.message || 'Неизвестная ошибка'}`);
-  //     } finally {
-  //       setSavingVolumes(prev => ({ ...prev, [reactionId]: false }));
-  //     }
-  //     return;
-  //   }
-    
-  //   if (parsedVolume < 0) {
-  //     alert('Объем не может быть отрицательным');
-  //     return;
-  //   }
-    
-  //   setSavingVolumes(prev => ({ ...prev, [reactionId]: true }));
-    
-  //   try {
-  //     await dispatch(saveReactionVolume({
-  //       synthesisId: parseInt(id),
-  //       reactionId: reactionId,
-  //       volume_sm: parsedVolume
-  //     })).unwrap();
-      
-  //     alert(`Объем для реакции успешно сохранен!`);
-  //   } catch (error: any) {
-  //     console.error('Ошибка сохранения объема:', error);
-  //     alert(`Ошибка сохранения объема: ${error.message || 'Неизвестная ошибка'}`);
-  //   } finally {
-  //     setSavingVolumes(prev => ({ ...prev, [reactionId]: false }));
-  //   }
-  // };
-
-  // Кнопка сохранения всех полей (концентрация + все объемы)
-  const handleSaveAll = async () => {
-    if (!id) return;
-    
-    setSavingAll(true);
-    try {
-      // Сохраняем концентрацию
-      const parsedPurity = parseNumberOrNull(purity);
-      if (parsedPurity !== null && parsedPurity >= 0 && parsedPurity <= 100) {
-        await dispatch(savePurityOnly({
-          synthesisId: parseInt(id),
-          purity: parsedPurity
-        })).unwrap();
-      } else if (parsedPurity === null) {
-        await dispatch(savePurityOnly({
-          synthesisId: parseInt(id),
-          purity: null
-        })).unwrap();
-      }
-      
-      // Затем сохраняем все объемы
-      const savePromises = Object.entries(volumes).map(([reactionId, volumeStr]) => {
-        const parsedVolume = parseNumberOrNull(volumeStr);
-        if (parsedVolume !== null && parsedVolume >= 0) {
-          return dispatch(saveReactionVolume({
-            synthesisId: parseInt(id),
-            reactionId: parseInt(reactionId),
-            volume_sm: parsedVolume
-          })).unwrap();
-        } else if (parsedVolume === null) {
-          return dispatch(saveReactionVolume({
-            synthesisId: parseInt(id),
-            reactionId: parseInt(reactionId),
-            volume_sm: null
-          })).unwrap();
-        }
-        return Promise.resolve();
-      });
-      
-      await Promise.all(savePromises);
-      
-      alert('Все данные успешно сохранены!');
-    } catch (error: any) {
-      console.error('Ошибка сохранения всех данных:', error);
-      alert(`Ошибка сохранения: ${error.message || 'Неизвестная ошибка'}`);
-    } finally {
-      setSavingAll(false);
+  const handleSaveVolume = async (reactionId: number, volumeStr: string) => {
+    if (!id || !reactionId) {
+      alert('Ошибка: не указан ID синтеза или реакции');
+      return;
     }
-  };
-
-  // Новая функция: сохранение только объемов (без концентрации)
-  const handleSaveVolumesOnly = async () => {
-    if (!id) return;
     
-    setSavingVolumesOnly(true);
+    const parsedVolume = parseNumberOrNull(volumeStr);
+    
+    if (parsedVolume === null) {
+      setSavingVolumes(prev => ({ ...prev, [reactionId]: true }));
+      try {
+        await dispatch(saveReactionVolume({
+          synthesisId: parseInt(id),
+          reactionId: reactionId,
+          volume_sm: null
+        })).unwrap();
+        
+        alert(`Объем для реакции очищен!`);
+      } catch (error: any) {
+        console.error('Ошибка сохранения объема:', error);
+        alert(`Ошибка сохранения объема: ${error.message || 'Неизвестная ошибка'}`);
+      } finally {
+        setSavingVolumes(prev => ({ ...prev, [reactionId]: false }));
+      }
+      return;
+    }
+    
+    if (parsedVolume < 0) {
+      alert('Объем не может быть отрицательным');
+      return;
+    }
+    
+    setSavingVolumes(prev => ({ ...prev, [reactionId]: true }));
+    
     try {
-      const volumesToSave: { [key: number]: number | null } = {};
-      Object.entries(volumes).forEach(([key, value]) => {
-        volumesToSave[parseInt(key)] = parseNumberOrNull(value);
-      });
-      
-      await dispatch(saveVolumesOnly({
+      await dispatch(saveReactionVolume({
         synthesisId: parseInt(id),
-        volumes: volumesToSave
+        reactionId: reactionId,
+        volume_sm: parsedVolume
       })).unwrap();
       
-      alert('Объемы успешно сохранены!');
+      alert(`Объем для реакции успешно сохранен!`);
     } catch (error: any) {
-      console.error('Ошибка сохранения объемов:', error);
-      alert(`Ошибка сохранения объемов: ${error.message || 'Неизвестная ошибка'}`);
+      console.error('Ошибка сохранения объема:', error);
+      alert(`Ошибка сохранения объема: ${error.message || 'Неизвестная ошибка'}`);
     } finally {
-      setSavingVolumesOnly(false);
+      setSavingVolumes(prev => ({ ...prev, [reactionId]: false }));
     }
   };
 
-  // Старая функция сохранения изменений (сохраняет и концентрацию, и объемы)
-  // const handleSaveChanges = async () => {
-  //   if (!id) return;
+  // Кнопка сохранения всех полей (концентрация + все объемы)
+  
+
+  // Функция для удаления реакции из синтеза
+  const handleRemoveReaction = async (reactionId: number) => {
+    if (!id) return;
     
-  //   try {
-  //     const parsedPurity = parseNumberOrNull(purity);
+    if (!window.confirm('Вы уверены, что хотите удалить эту реакцию из синтеза?')) {
+      return;
+    }
+    
+    setRemovingReactions(prev => ({ ...prev, [reactionId]: true }));
+    try {
+      await dispatch(removeReactionFromSynthesis({
+        synthesisId: parseInt(id),
+        reactionId: reactionId
+      })).unwrap();
       
-  //     const volumesToSave: { [key: number]: number | null } = {};
-  //     Object.entries(volumes).forEach(([key, value]) => {
-  //       volumesToSave[parseInt(key)] = parseNumberOrNull(value);
-  //     });
-      
-  //     await dispatch(saveSynthesisChanges({
-  //       synthesisId: parseInt(id),
-  //       purity: parsedPurity,
-  //       volumes: volumesToSave
-  //     })).unwrap();
-      
-  //     alert('Изменения успешно сохранены!');
-  //   } catch (error: any) {
-  //     console.error('Ошибка сохранения:', error);
-  //     alert(`Ошибка сохранения: ${error.message || 'Неизвестная ошибка'}`);
-  //   }
-  // };
+      // Обновляем синтез после удаления
+      dispatch(getSynthesis(parseInt(id)));
+      alert('Реакция удалена из синтеза!');
+    } catch (error: any) {
+      console.error('Ошибка удаления реакции:', error);
+      alert(`Ошибка удаления реакции: ${error.message || 'Неизвестная ошибка'}`);
+    } finally {
+      setRemovingReactions(prev => ({ ...prev, [reactionId]: false }));
+    }
+  };
 
   const handleDeleteSynthesis = async () => {
     if (!id) return;
@@ -393,7 +324,7 @@ export const SynthesisPage: FC = () => {
           
           <div className="purity-field">
             <label className="field-label">Концентрация</label>
-            <div className="field-input-group">
+            <div className="purity-input-row">
               <input
                 type="text"
                 className="field-input"
@@ -403,59 +334,88 @@ export const SynthesisPage: FC = () => {
                 placeholder="0-100%"
                 inputMode="decimal"
               />
-              <div className="field-actions">
-                {isDraft && (
-                  <Button 
-                    variant="outline-primary" 
-                    size="sm"
-                    onClick={handleSavePurityOnly}
-                    disabled={savingPurity}
-                    className="save-field-btn"
-                  >
-                    {savingPurity ? (
-                      <>
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                          className="me-2"
-                        />
-                        Сохранение...
-                      </>
-                    ) : (
-                      'Сохранить концентрацию'
-                    )}
-                  </Button>
-                )}
-              </div>
+              {isDraft && (
+                <Button 
+                  variant="outline-primary" 
+                  size="sm"
+                  onClick={handleSavePurityOnly}
+                  disabled={savingPurity}
+                  className="save-purity-btn"
+                  style={{color: "#FFFFFF", border: "none"}}
+                >
+                  {savingPurity ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="me-1"
+                      />
+                      Сохранение...
+                    </>
+                  ) : (
+                    'Сохранить концентрацию'
+                  )}
+                </Button>
+              )}
             </div>
           </div>
 
           {reactions.length > 0 ? (
-            reactions.map((synthesisReaction: any, index: number) => (
-              <div key={synthesisReaction.reaction.ID || index} className="reaction-volume-field">
-                <label className="field-label">
-                  {synthesisReaction.reaction.StartingMaterial || 'Неизвестное вещество'}
-                </label>
-                <div className="field-input-group">
-                  <input
-                    type="text"
-                    className="field-input"
-                    placeholder="V, мл"
-                    value={volumes[synthesisReaction.reaction.ID!] || ''}
-                    onChange={(e) => 
-                      synthesisReaction.reaction.ID && 
-                      handleVolumeChange(synthesisReaction.reaction.ID, e.target.value)
-                    }
-                    disabled={!isDraft}
-                    inputMode="decimal"
-                  />
-                  
+            reactions.map((synthesisReaction: any, index: number) => {
+              const reactionId = synthesisReaction.reaction.ID;
+              const isSaving = savingVolumes[reactionId] || false;
+              
+              return (
+                <div key={reactionId || index} className="reaction-volume-field">
+                  <label className="field-label">
+                    {synthesisReaction.reaction.StartingMaterial || 'Неизвестное вещество'}
+                  </label>
+                  <div className="volume-input-row">
+                    <input
+                      type="text"
+                      className="field-input"
+                      placeholder="V, мл"
+                      value={volumes[reactionId] || ''}
+                      onChange={(e) => 
+                        reactionId && 
+                        handleVolumeChange(reactionId, e.target.value)
+                      }
+                      disabled={!isDraft}
+                      inputMode="decimal"
+                    />
+                    {isDraft && (
+                      <Button 
+                        variant="outline-secondary" 
+                        size="sm"
+                        onClick={() => reactionId && handleSaveVolume(reactionId, volumes[reactionId] || '')}
+                        disabled={isSaving || loading}
+                        className="save-volume-btn"
+                        // style={{color: "#00A88F", border: "1px solid #00A88F"}}
+                      >
+                        {isSaving ? (
+                          <>
+                            <Spinner
+                              as="span"
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                              className="me-1"
+                            />
+                            ...
+                          </>
+                        ) : (
+                          'Сохранить'
+                        )}
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="no-reactions-message">
               <p>В этом синтезе пока нет реакций</p>
@@ -464,59 +424,7 @@ export const SynthesisPage: FC = () => {
         </div>
         
         {/* Изменяем секцию кнопок сохранения */}
-        {isDraft && (
-          <div className="save-buttons-section">
-            <div className="save-buttons">
-              <Button 
-                variant="primary" 
-                size="sm"
-                onClick={handleSaveVolumesOnly} // Теперь сохраняет только объемы
-                className="save-changes-btn me-2"
-                disabled={loading || savingVolumesOnly}
-              >
-                {loading || savingVolumesOnly ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="me-2"
-                    />
-                    Сохранение...
-                  </>
-                ) : (
-                  'Сохранить объемы' // Изменяем текст
-                )}
-              </Button>
-              
-              <Button 
-                variant="success" 
-                size="sm"
-                onClick={handleSaveAll}
-                className="save-all-btn"
-                disabled={loading || savingAll}
-              >
-                {loading || savingAll ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="me-2"
-                    />
-                    Сохранение...
-                  </>
-                ) : (
-                  'Сохранить черновик синтеза' // Оставляем старый текст
-                )}
-              </Button>
-            </div>
-          </div>
-        )}
+        
 
         {reactions.length > 0 && (
           <div className="reactions-header">
@@ -556,57 +464,89 @@ export const SynthesisPage: FC = () => {
 
         <div className="reactions-list">
           {reactions.length > 0 ? (
-            reactions.map((synthesisReaction: any, index: number) => (
-              <div key={synthesisReaction.reaction.ID || index} className="reaction-item">
-                <h4 className="reaction-title">
-                  {synthesisReaction.reaction.Title || 'Без названия'} 
-                  {synthesisReaction.count > 1 && ` (${synthesisReaction.count} шт.)`}
-                </h4>
-                
-                <div className="reaction-content">
-                  <div className="reaction-image">
-                    <img 
-                      src={transformImageUrl(synthesisReaction.reaction.Src) || defimage} 
-                      alt={synthesisReaction.reaction.Title || 'Изображение реакции'} 
-                    />
+            reactions.map((synthesisReaction: any, index: number) => {
+              const reactionId = synthesisReaction.reaction.ID;
+              const isRemoving = removingReactions[reactionId] || false;
+              
+              return (
+                <div key={reactionId || index} className="reaction-item">
+                  <div className="reaction-header">
+                    <h4 className="reaction-title">
+                      {synthesisReaction.reaction.Title || 'Без названия'} 
+                      {synthesisReaction.count > 1 && ` (${synthesisReaction.count} шт.)`}
+                    </h4>
+                    {isDraft && (
+                      <Button 
+                        variant="outline-danger" 
+                        size="sm"
+                        onClick={() => handleRemoveReaction(reactionId)}
+                        disabled={isRemoving || loading}
+                        className="remove-reaction-btn"
+                      >
+                        {isRemoving ? (
+                          <>
+                            <Spinner
+                              as="span"
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                              className="me-1"
+                            />
+                            Удаление...
+                          </>
+                        ) : (
+                          'Удалить'
+                        )}
+                      </Button>
+                    )}
                   </div>
                   
-                  <div className="starting-material-header">
-                    <div className="material-data">
-                      <span className="material-name">{synthesisReaction.reaction.StartingMaterial || 'Неизвестно'}</span>
-                      <div className="property-value">
-                        <span>{synthesisReaction.reaction.DensitySM || '-'}</span>
-                      </div>
-                      <div className="property-value">
-                        <span>{synthesisReaction.reaction.MolarMassSM || '-'}</span>
-                      </div>
-                      <div className="property-value">
-                        <span className="volume-display">
-                          {volumes[synthesisReaction.reaction.ID!] === null || volumes[synthesisReaction.reaction.ID!] === undefined ? '-' : volumes[synthesisReaction.reaction.ID!]}
-                        </span>
+                  <div className="reaction-content">
+                    <div className="reaction-image">
+                      <img 
+                        src={transformImageUrl(synthesisReaction.reaction.Src) || defimage} 
+                        alt={synthesisReaction.reaction.Title || 'Изображение реакции'} 
+                      />
+                    </div>
+                    
+                    <div className="starting-material-header">
+                      <div className="material-data">
+                        <span className="material-name">{synthesisReaction.reaction.StartingMaterial || 'Неизвестно'}</span>
+                        <div className="property-value">
+                          <span>{synthesisReaction.reaction.DensitySM || '-'}</span>
+                        </div>
+                        <div className="property-value">
+                          <span>{synthesisReaction.reaction.MolarMassSM || '-'}</span>
+                        </div>
+                        <div className="property-value">
+                          <span className="volume-display">
+                            {volumes[reactionId] === null || volumes[reactionId] === undefined ? '-' : volumes[reactionId]}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="result-material-header">
-                    <div className="material-data">
-                      <span className="material-name">{synthesisReaction.reaction.ResultMaterial || 'Неизвестно'}</span>
-                      <div className="property-value">
-                        <span>{synthesisReaction.reaction.DensityRM || '-'}</span>
-                      </div>
-                      <div className="property-value">
-                        <span>{synthesisReaction.reaction.MolarMassRM || '-'}</span>
-                      </div>
-                      <div className="property-value">
-                        <span className="volume-display">
-                          {synthesisReaction.volume_rm || '-'}
-                        </span>
+                    
+                    <div className="result-material-header">
+                      <div className="material-data">
+                        <span className="material-name">{synthesisReaction.reaction.ResultMaterial || 'Неизвестно'}</span>
+                        <div className="property-value">
+                          <span>{synthesisReaction.reaction.DensityRM || '-'}</span>
+                        </div>
+                        <div className="property-value">
+                          <span>{synthesisReaction.reaction.MolarMassRM || '-'}</span>
+                        </div>
+                        <div className="property-value">
+                          <span className="volume-display">
+                            {synthesisReaction.volume_rm || '-'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="empty-synthesis">
               <div className="alert alert-info">

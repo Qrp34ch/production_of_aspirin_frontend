@@ -1,3 +1,4 @@
+// userSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api';
 
@@ -21,9 +22,6 @@ const initialState: UserState = {
   loading: false,
   error: null,
 };
-
-// Флаг для определения первой загрузки приложения
-let isFirstLoad = true;
 
 // Асинхронные действия
 export const loginUser = createAsyncThunk(
@@ -81,49 +79,6 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
-
-// Проверка авторизации с автоматическим сбросом при первой загрузке
-export const checkAuth = createAsyncThunk(
-  'user/checkAuth',
-  async (_, { rejectWithValue }) => {
-    // Если это первая загрузка приложения - ВСЕГДА сбрасываем авторизацию
-    if (isFirstLoad) {
-      isFirstLoad = false;
-      console.log('🔄 Первая загрузка приложения - сбрасываем авторизацию');
-      localStorage.removeItem('authToken'); // Очищаем токен
-      return rejectWithValue('Требуется вход после перезагрузки страницы');
-    }
-    
-    // Для последующих проверок работаем как обычно
-    try {
-      const token = localStorage.getItem('authToken');
-      
-      if (!token) {
-        console.log('checkAuth: токен не найден');
-        return rejectWithValue('Токен не найден');
-      }
-
-      const response = await api.api.usersProfileList();
-      const userData = response.data.data;
-      
-      if (userData) {
-        return {
-          id: userData.id || 0,
-          login: userData.login || '',
-          fio: userData.fio || '',
-          is_moderator: userData.is_moderator || false
-        } as User;
-      }
-      
-      throw new Error('Данные пользователя не получены');
-    } catch (error: any) {
-      console.error('checkAuth: ошибка:', error);
-      localStorage.removeItem('authToken');
-      return rejectWithValue(error.response?.data?.description || 'Ошибка проверки авторизации');
-    }
-  }
-);
-
 export const getProfile = createAsyncThunk(
   'user/getProfile',
   async (_, { rejectWithValue }) => {
@@ -147,16 +102,59 @@ export const getProfile = createAsyncThunk(
     }
   }
 );
-
 export const updateProfile = createAsyncThunk(
   'user/updateProfile',
-  async (userData: { login?: string; fio?: string; password?: string }, { rejectWithValue }) => {
+  async (userData: { login?: string; name?: string; password?: string }, { rejectWithValue }) => {
     try {
       const response = await api.api.usersProfileUpdate(userData);
-      return response.data;
+      const updatedUser = response.data.data;
+      
+      if (updatedUser) {
+        return {
+          id: updatedUser.id || 0,
+          login: updatedUser.login || '',
+          fio: updatedUser.fio || '',
+          is_moderator: updatedUser.is_moderator || false
+        } as User;
+      }
+      
+      throw new Error('Данные пользователя не получены после обновления');
     } catch (error: any) {
       const errorMessage = error.response?.data?.description || 'Ошибка обновления профиля';
       return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+// Проверка авторизации при загрузке приложения
+export const checkAuth = createAsyncThunk(
+  'user/checkAuth',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      
+      if (!token) {
+        return rejectWithValue('Токен не найден');
+      }
+
+      const response = await api.api.usersProfileList();
+      const userData = response.data.data;
+      
+      if (userData) {
+        return {
+          id: userData.id || 0,
+          login: userData.login || '',
+          fio: userData.fio || '',
+          is_moderator: userData.is_moderator || false
+        } as User;
+      }
+      
+      throw new Error('Данные пользователя не получены');
+    } catch (error: any) {
+      console.error('checkAuth: ошибка проверки токена:', error);
+      // Если токен невалидный, удаляем его
+      localStorage.removeItem('authToken');
+      return rejectWithValue(error.response?.data?.description || 'Ошибка проверки авторизации');
     }
   }
 );
@@ -172,17 +170,13 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
     },
-    // Редюсер для принудительного сброса состояния
-    resetAuthState: (state) => {
+    // Редюсер для сброса состояния при загрузке страницы
+    resetUserState: (state) => {
+      // ТОЛЬКО сбрасываем Redux состояние, не трогаем localStorage!
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
-      localStorage.removeItem('authToken');
-    },
-    // Функция для сброса флага first load (например, при тестировании)
-    resetFirstLoad: () => {
-      isFirstLoad = true;
     }
   },
   extraReducers: (builder) => {
@@ -227,9 +221,10 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.error = action.payload as string;
       })
-      // Check Auth (новая функция)
+      // Check Auth
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.loading = false;
@@ -237,23 +232,29 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.error = null;
       })
+      
       .addCase(checkAuth.rejected, (state) => {
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
         state.error = null;
       })
-      // Get Profile (оставляем для совместимости)
-      .addCase(getProfile.fulfilled, (state, action) => {
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
+        state.error = null;
       })
-      .addCase(getProfile.rejected, (state) => {
-        state.user = null;
-        state.isAuthenticated = false;
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { clearError, setUser, resetAuthState, resetFirstLoad } = userSlice.actions;
+export const { clearError, setUser, resetUserState } = userSlice.actions;
 export default userSlice.reducer;

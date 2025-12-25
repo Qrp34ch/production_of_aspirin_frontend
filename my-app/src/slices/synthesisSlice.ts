@@ -490,6 +490,24 @@ export const saveReactionVolume = createAsyncThunk(
     }
   }
 );
+// В synthesisSlice.ts, добавьте следующие actions:
+
+// Action для удаления реакции из синтеза (уменьшение количества на 1)
+export const removeReactionFromSynthesis = createAsyncThunk(
+  'synthesis/removeReaction',
+  async ({ synthesisId, reactionId }: { synthesisId: number; reactionId: number }, { rejectWithValue }) => {
+    try {
+      const response = await api.api.reactionSynthesisDelete({
+        reaction_id: reactionId
+      });
+      return { synthesisId, reactionId, response: response.data };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.description || 'Ошибка удаления реакции');
+    }
+  }
+);
+
+// Action для сохранения конкретного объема (уже есть - saveReactionVolume)
 
 const synthesisSlice = createSlice({
   name: 'synthesis',
@@ -681,7 +699,33 @@ const synthesisSlice = createSlice({
       .addCase(formSynthesis.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(removeReactionFromSynthesis.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(removeReactionFromSynthesis.fulfilled, (state, action) => {
+        const { reactionId } = action.payload;
+        if (state.currentSynthesis) {
+          // Находим реакцию и уменьшаем количество или удаляем
+          const reactionIndex = state.currentSynthesis.reactions.findIndex(
+            (r: SynthesisReaction) => r.reaction.ID === reactionId
+          );
+          
+          if (reactionIndex !== -1) {
+            const reaction = state.currentSynthesis.reactions[reactionIndex];
+            if (reaction.count > 1) {
+              reaction.count -= 1;
+            } else {
+              state.currentSynthesis.reactions.splice(reactionIndex, 1);
+            }
+          }
+        }
+        state.loading = false;
+      })
+      .addCase(removeReactionFromSynthesis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 
