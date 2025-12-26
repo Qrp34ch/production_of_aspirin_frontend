@@ -41,7 +41,7 @@ const App: FC = () => {
   }, [dispatch]);
 
   return (
-    <BrowserRouter basename="/RIP_frontend">
+    <BrowserRouter basename="/production_of_aspirin_frontend">
       <div className="App">
         <Navigation />
         <Routes>

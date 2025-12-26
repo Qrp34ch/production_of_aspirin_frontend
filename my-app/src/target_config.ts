@@ -21,4 +21,4 @@ export const transformImageUrl = (originalUrl: string) => {
   return originalUrl.replace('http://localhost:9000', IMAGE_BASE_URL);
 };
 
-export const BASE_PATH = '/RIP_frontend'
+export const BASE_PATH = '/production_of_aspirin_frontend'

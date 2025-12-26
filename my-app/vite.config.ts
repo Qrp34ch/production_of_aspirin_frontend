@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  base: '/RIP_frontend/',
+  base: '/production_of_aspirin_frontend/',
   plugins: [
     react({
       jsxRuntime: 'automatic'
@@ -18,8 +18,8 @@ export default defineConfig({
         theme_color: '#00A88F',
         background_color: '#EBF8F6',
         display: 'standalone',
-        start_url: '/RIP_frontend/',
-        scope: '/RIP_frontend/',
+        start_url: '/production_of_aspirin_frontend/',
+        scope: '/production_of_aspirin_frontend/',
         icons: [
           {
             src: 'A.png',
@@ -35,7 +35,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/RIP_frontend/index.html',
+        navigateFallback: '/production_of_aspirin_frontend/index.html',
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true

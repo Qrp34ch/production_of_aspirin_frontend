@@ -145,6 +145,7 @@ const SynthesesPage: FC = () => {
       const completedSyntheses = syntheses.filter(s => s.status === 'завершён');
       
       let totalCount = 0;
+      console.log(totalCount)
       const counts: {[key: number]: number} = {};
       
       const promises = completedSyntheses.map(async (synthesis) => {
