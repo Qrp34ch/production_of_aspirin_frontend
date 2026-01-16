@@ -362,65 +362,6 @@ export const SynthesisPage: FC = () => {
               )}
             </div>
           </div>
-
-          {reactions.length > 0 ? (
-            reactions.map((synthesisReaction: any, index: number) => {
-              const reactionId = synthesisReaction.reaction.ID;
-              const isSaving = savingVolumes[reactionId] || false;
-              
-              return (
-                <div key={reactionId || index} className="reaction-volume-field">
-                  <label className="field-label">
-                    {synthesisReaction.reaction.StartingMaterial || 'Неизвестное вещество'}
-                  </label>
-                  <div className="volume-input-row">
-                    <input
-                      type="text"
-                      className="field-input"
-                      placeholder="V, мл"
-                      value={volumes[reactionId] || ''}
-                      onChange={(e) => 
-                        reactionId && 
-                        handleVolumeChange(reactionId, e.target.value)
-                      }
-                      disabled={!isDraft}
-                      inputMode="decimal"
-                    />
-                    {isDraft && (
-                      <Button 
-                        variant="outline-secondary" 
-                        size="sm"
-                        onClick={() => reactionId && handleSaveVolume(reactionId, volumes[reactionId] || '')}
-                        disabled={isSaving || loading}
-                        className="save-volume-btn"
-                        // style={{color: "#00A88F", border: "1px solid #00A88F"}}
-                      >
-                        {isSaving ? (
-                          <>
-                            <Spinner
-                              as="span"
-                              animation="border"
-                              size="sm"
-                              role="status"
-                              aria-hidden="true"
-                              className="me-1"
-                            />
-                            ...
-                          </>
-                        ) : (
-                          'Сохранить'
-                        )}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="no-reactions-message">
-              <p>В этом синтезе пока нет реакций</p>
-            </div>
-          )}
         </div>
         
         {/* Изменяем секцию кнопок сохранения */}
@@ -467,6 +408,7 @@ export const SynthesisPage: FC = () => {
             reactions.map((synthesisReaction: any, index: number) => {
               const reactionId = synthesisReaction.reaction.ID;
               const isRemoving = removingReactions[reactionId] || false;
+              const isSaving = savingVolumes[reactionId] || false;
               
               return (
                 <div key={reactionId || index} className="reaction-item">
@@ -500,6 +442,32 @@ export const SynthesisPage: FC = () => {
                         )}
                       </Button>
                     )}
+                    {isDraft && (
+                                <Button 
+                                  variant="outline-secondary" 
+                                  size="sm"
+                                  onClick={() => reactionId && handleSaveVolume(reactionId, volumes[reactionId] || '')}
+                                  disabled={isSaving || loading}
+                                  className="save-volume-btn"
+                                  // style={{color: "#00A88F", border: "1px solid #00A88F"}}
+                                >
+                                  {isSaving ? (
+                                    <>
+                                      <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                        className="me-1"
+                                      />
+                                      ...
+                                    </>
+                                  ) : (
+                                    'Сохранить'
+                                  )}
+                                </Button>
+                              )}
                   </div>
                   
                   <div className="reaction-content">
@@ -521,7 +489,22 @@ export const SynthesisPage: FC = () => {
                         </div>
                         <div className="property-value">
                           <span className="volume-display">
-                            {volumes[reactionId] === null || volumes[reactionId] === undefined ? '-' : volumes[reactionId]}
+                            <div className="volume-input-row">
+                              <input
+                                type="text"
+                                className="field-input"
+                                placeholder="V, мл"
+                                value={volumes[reactionId] || ''}
+                                onChange={(e) => 
+                                  reactionId && 
+                                  handleVolumeChange(reactionId, e.target.value)
+                                }
+                                disabled={!isDraft}
+                                inputMode="decimal"
+                              />
+                              
+                            </div>
+                            {/* {volumes[reactionId] === null || volumes[reactionId] === undefined ? '-' : volumes[reactionId]} */}
                           </span>
                         </div>
                       </div>

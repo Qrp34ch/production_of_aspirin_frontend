@@ -16,6 +16,10 @@ import './App.css';
 import { resetUserState } from './slices/userSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from './store/store'; // Импортируем тип AppDispatch
+import { NotFoundPage } from './pages/NotFoundPage';
+import { ForbiddenPage } from './pages/ForbiddenPage';
+import { AdminReactionsPage } from './pages/AdminReactionsPage';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 const App: FC = () => {
   // Используем типизированный dispatch
@@ -50,9 +54,29 @@ const App: FC = () => {
           <Route path={ROUTES.REACTION_DETAIL} element={<ReactionDetailPage />} />
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
-          <Route path={ROUTES.SYNTHESIS} element={<SynthesisPage />} />
+          <Route 
+            path={ROUTES.SYNTHESIS} 
+            element={
+              <ProtectedRoute>
+                <SynthesisPage />
+              </ProtectedRoute>
+            } 
+          />
           <Route path={ROUTES.SYNTHESES} element={<SynthesesPage />} />
           <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="/403" element={<ForbiddenPage />} />
+          <Route 
+            path="/admin/reactions" 
+            element={
+              <ProtectedRoute requireModerator>
+                <AdminReactionsPage />
+              </ProtectedRoute>
+            } 
+          />
+         
+          
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         
         {/* PWA Install Prompt */}

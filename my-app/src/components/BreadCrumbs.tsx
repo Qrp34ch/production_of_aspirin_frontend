@@ -44,6 +44,10 @@ export const BreadCrumbs: FC = () => {
       const synthesisId = pathSegments[1];
       crumbs.push({ label: `Синтез ${synthesisId}` });
     }
+
+    if (path === '/admin/reactions' || pathSegments[1] === 'reactions') {
+      crumbs.push({ label: 'Управление реакциями' });
+    }
     return crumbs;
   };
 

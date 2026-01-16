@@ -533,10 +533,7 @@ export class Api<
      */
     reactionImageCreate: (
       id: number,
-      data: {
-        /** Image file */
-        image: File;
-      },
+      data: FormData, // ИЗМЕНЕНО: был { image: File }, теперь FormData
       params: RequestParams = {},
     ) =>
       this.request<

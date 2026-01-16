@@ -20,6 +20,9 @@ export const ROUTES = {
   PROFILE: "/profile",
   SYNTHESES: "/syntheses",
   SYNTHESIS: "/synthesis/:id",
+  ADMIN_REACTIONS: '/admin/reactions',
+  NOT_FOUND: '/404',
+  FORBIDDEN: '/403',
 };
 
 export type RouteKeyType = keyof typeof ROUTES;
@@ -33,4 +36,7 @@ export const ROUTE_LABELS: { [key in RouteKeyType]: string } = {
   PROFILE: "Профиль",
   SYNTHESES: "Мои синтезы",
   SYNTHESIS: "Синтез",
+  ADMIN_REACTIONS: "Модерские вещи",
+  NOT_FOUND: "404",
+  FORBIDDEN: "403",
 };

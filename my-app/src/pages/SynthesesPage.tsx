@@ -281,7 +281,7 @@ const SynthesesPage: FC = () => {
         {isModerator && (
           <Alert variant="info" className="mb-3 moderator-alert">
             <div className="d-flex align-items-center">
-              <span>Режим модератора</span>
+              <span>Режим руководителя производства</span>
             </div>
           </Alert>
         )}
@@ -381,7 +381,7 @@ const SynthesesPage: FC = () => {
               <div className="mb-3 d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center flex-wrap">
                   <Badge bg="info" className="me-2 mb-2">
-                    {isModerator ? 'Всего заявок:' : 'Мои заявки:'} {synthesesArray.length}
+                    {isModerator ? 'Всего синтезов:' : 'Мои синтезы:'} {synthesesArray.length}
                   </Badge>
                   
                 </div>
@@ -392,10 +392,10 @@ const SynthesesPage: FC = () => {
             <div className="syntheses-table-container">
               {/* Заголовки таблицы */}
               <div className="table-header">
-                <div className="table-header-cell">Заявка</div>
+                <div className="table-header-cell">Синтез</div>
                 <div className="table-header-cell">Статус</div>
                 <div className="table-header-cell">Создатель</div>
-                <div className="table-header-cell">Модератор</div>
+                <div className="table-header-cell">Проверил</div>
                 <div className="table-header-cell">Концентрация</div>
                 <div className="table-header-cell">Дата создания</div>
                 <div className="table-header-cell">Дата завершения</div>
